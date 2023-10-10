@@ -1,10 +1,9 @@
-// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-// import { cookies } from 'next/headers'
-// import Link from 'next/link'
-// import LogoutButton from '../components/LogoutButton'
+import LogoutButton from '../components/LogoutButton'
 // import SupabaseLogo from '../components/SupabaseLogo'
 // import NextJsLogo from '../components/NextJsLogo'
-// import DeployButton from '../components/DeployButton'
+import DeployButton from '../components/DeployButton'
+import Dashboard from '@/components/Dashboard'
+
 
 // export const dynamic = 'force-dynamic'
 
@@ -188,12 +187,13 @@
 // }
 import MainBody from '@/components/MainBody'
 
-export default function Home () {
+
+export default async function Home () {
   return (
-    <main className='bg-neutral-900 p-2'>
+    <main className='flex flex-col bg-neutral-900 p-2 gap-2'>
+      <Dashboard />
       <section className='gap-12 grid grid-cols-6'>
         <MainBody />
-        <h1 className='md:flex hidden'>Hello world</h1>
       </section>
     </main>
   )

@@ -26,7 +26,7 @@ const PostCard = ({ title, image, comments, votes, user }) => {
               <div className='flex items-center gap-1'>
                 <p className='font-bold font-impact text-xs'>r/pcgaming &#8226;</p>
               </div>
-              <p className='text-xs text-neutral-400 font-impact'>Publicado por {user}</p>
+              <p className='text-xs text-neutral-400 font-impact'>Publicado por <a href={`users/${user}`}>{user}</a></p> 
               <p className='text-xs text-neutral-400 font-impact'>hace 8 horas</p>
             </div>
             <div className='flex gap-1 items-center'>

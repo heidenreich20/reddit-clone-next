@@ -1,7 +1,69 @@
+'use client'
+import { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
-const Navbar = () => {
+import Link from 'next/link'
+import LogoutButton from './LogoutButton'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+
+const Navbar = ({ session }) => {
+  const supabase = createClientComponentClient()
+  const noImage = 'https://precisionpharmacy.net/wp-content/themes/apexclinic/images/no-image/No-Image-Found-400x264.png'
+  const [loading, setLoading] = useState(true)
+  const [avatarUrl, setAvatarUrl] = useState(null)
+  const [avatar, setAvatar] = useState(null)
+  const [username, setUsername] = useState(null)
+  const user = session?.user
+
+  const getProfile = useCallback(async () => {
+    try {
+      setLoading(true)
+
+      let { data, error, status } = await supabase
+        .from('profiles')
+        .select(`username, avatar_url`)
+        .eq('id', user?.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setUsername(data.username)
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }, [user, supabase])
+
+  useEffect(() => {
+    getProfile()
+  }, [user, getProfile])
+
+  useEffect(() => {
+    async function downloadImage(path) {
+      try {
+        const { data, error } = await supabase.storage.from('avatars').download(path)
+        if (error) {
+          throw error
+        }
+        const url = URL.createObjectURL(data)
+        console.log(url)
+        setAvatar(url)
+      } catch (error) {
+        console.log('Error downloading image: ', error)
+      }
+    }
+
+    if (avatarUrl) downloadImage(avatarUrl)
+  }, [avatarUrl, supabase])
+
   return (
-    <nav className='flex sticky items-center md:justify-start justify-between md:gap-24 gap-3 py-2 px-8 bg-neutral-800'>
+    <nav className='flex w-full sticky items-center md:justify-between justify-between md:gap-24 gap-3 py-2 px-8 bg-neutral-800'>
+      <div className='flex gap-12'>
       <section className='flex items-center gap-4'>
         <div className='rounded-full w-fit p-1.5 bg-purple-500'>
           <svg className='fill-white md:w-5 w-8 -translate-y-0.5' viewBox='0 0 24 24' fill='inherit' xmlns='http://www.w3.org/2000/svg'>
@@ -12,12 +74,29 @@ const Navbar = () => {
             <path d='M22 15C22 14.4477 22.4477 14 23 14C23.5523 14 24 14.4477 24 15V17C24 17.5523 23.5523 18 23 18C22.4477 18 22 17.5523 22 17V15Z' fill='inherit' />
           </svg>
         </div>
-        <svg className='fill-white md:w-6 w-8 icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
+        <Link href="/">
+          <svg className='fill-white md:w-6 w-8 icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
+        </Link>
       </section>
       <div className='flex relative items-center justify-start'>
         <input className='h-9 md:h-8 w-44 md:w-full rounded-full bg-neutral-700 text-white pl-9 pr-4' type='search' />
         <Image width={24} height={24} className='absolute w-6 ml-2' src='/search.svg' alt='search icon' />
       </div>
+      </div>
+      {user ? (
+             <div className="flex text-white items-center gap-2">
+              <Link href={`/users/${username}`}>{username ? username : 'Guest'}</Link>
+              <Image alt='avatar' className='object-cover rounded-full' width={32} height={32} src={avatar ? avatar : noImage} />
+               <LogoutButton />
+             </div>
+           ) : (
+             <Link
+               href="/login"
+               className="py-2 px-3 bg-purple-500 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
+             >
+               Login
+             </Link>
+           )}
     </nav>
   )
 }
