@@ -97,7 +97,7 @@ export default function AccountForm({ session }) {
       <Avatar
       uid={user.id}
       url={avatar_url}
-      size={150}
+      size={144}
       onUpload={(url) => {
         setAvatarUrl(url)
         updateProfile({ username, avatar_url: url })

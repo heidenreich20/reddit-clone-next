@@ -7,6 +7,7 @@ export default function Avatar({ uid, url, size, onUpload }) {
   const supabase = createClientComponentClient()
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [uploading, setUploading] = useState(false)
+  const noAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5OuTLrRxelnXyGeD6KieoxUZW7gyffxCr3_La8Qm8&s'
 
   useEffect(() => {
     async function downloadImage(path) {
@@ -55,33 +56,39 @@ export default function Avatar({ uid, url, size, onUpload }) {
   return (
     <div>
       {avatarUrl ? (
-        <Image
+        <div className='flex shadow-md cursor-pointer overflow-hidden shadow-neutral-400 rounded-full w-fit justify-center items-center m-auto relative'>
+          <Image
           width={size}
           height={size}
           src={avatarUrl}
           alt="Avatar"
-          className="avatar image"
+          className="pointer-events-none aspect-square"
           style={{ height: size, width: size }}
-        />
+          />
+          <label className='absolute cursor-pointer w-full h-full' htmlFor="single" />
+          <input
+            className='hidden'
+            type="file"
+            id="single"
+            accept="image/*"
+            onChange={uploadAvatar}
+            disabled={uploading}
+          />
+        </div>
       ) : (
-        <div className="avatar no-image" style={{ height: size, width: size }} />
+        <div className='flex w-fit justify-center overflow-hidden rounded-full items-center m-auto relative'>
+          <Image alt='image placeholder' className="pointer-events-none hover:cursor-pointer aspect-square m-auto object-cover" priority={true} width={144} height={144} src='/noImage.webp' />
+          <label className='absolute cursor-pointer w-full h-full' htmlFor="single" />
+         <input
+            className='hidden'
+            type="file"
+            id="single"
+            accept="image/*"
+            onChange={uploadAvatar}
+            disabled={uploading}
+          />
+        </div>
       )}
-      <div style={{ width: size }}>
-        <label className="button primary block" htmlFor="single">
-          {uploading ? 'Uploading ...' : 'Upload'}
-        </label>
-        <input
-          style={{
-            visibility: 'hidden',
-            position: 'absolute',
-          }}
-          type="file"
-          id="single"
-          accept="image/*"
-          onChange={uploadAvatar}
-          disabled={uploading}
-        />
-      </div>
     </div>
   )
 }

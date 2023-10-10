@@ -41,7 +41,7 @@ const Navbar = ({ session }) => {
 
   useEffect(() => {
     getProfile()
-  }, [user, getProfile])
+  }, [user, getProfile, supabase])
 
   useEffect(() => {
     async function downloadImage(path) {
@@ -51,7 +51,6 @@ const Navbar = ({ session }) => {
           throw error
         }
         const url = URL.createObjectURL(data)
-        console.log(url)
         setAvatar(url)
       } catch (error) {
         console.log('Error downloading image: ', error)
@@ -78,10 +77,10 @@ const Navbar = ({ session }) => {
           <svg className='fill-white md:w-6 w-8 icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
         </Link>
       </section>
-      <div className='flex relative items-center justify-start'>
+      {/* <div className='flex relative items-center justify-start'>
         <input className='h-9 md:h-8 w-44 md:w-full rounded-full bg-neutral-700 text-white pl-9 pr-4' type='search' />
         <Image width={24} height={24} className='absolute w-6 ml-2' src='/search.svg' alt='search icon' />
-      </div>
+      </div> */}
       </div>
       {user ? (
              <div className="flex text-white items-center gap-2">
