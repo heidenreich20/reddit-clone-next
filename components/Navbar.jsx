@@ -86,7 +86,7 @@ const Navbar = ({ session }) => {
       {user ? (
              <div className="flex text-white items-center gap-2">
               <Link href={`/users/${username}`}>{username ? username : 'Guest'}</Link>
-              <Image alt='avatar' className='object-cover rounded-full' width={32} height={32} src={avatar ? avatar : noImage} />
+              <Image alt='avatar' className='object-cover aspect-square rounded-full' width={36} height={36} src={avatar ? avatar : noImage} />
                <LogoutButton />
              </div>
            ) : (

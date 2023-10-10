@@ -4,6 +4,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Avatar from '@/components/Avatar'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
+import SkeletonLoader from '@/components/SkeletonLoader'
  
 export default function AccountForm({ session }) {
   const params = useParams()
@@ -151,10 +152,10 @@ export default function AccountForm({ session }) {
         </div>
       </>
       ) : (
-        <div>
-          <p>{fullname ? fullname : 'pepito'}</p>
-          <p>{username ? username : 'pepito'}</p>
-          <Image width={64} height={64} src={profileAvatar ? profileAvatar : 'https://precisionpharmacy.net/wp-content/themes/apexclinic/images/no-image/No-Image-Found-400x264.png'} />
+        <div className='flex flex-col w-fit gap-2 p-5'>
+          {loading ? <SkeletonLoader /> : <p className='bg-neutral-200/[0.5] p-2 rounded-lg font-semibold text-neutral-700'>{fullname}</p> }
+          {loading ? <SkeletonLoader /> : <p className='bg-neutral-200/[0.5] p-2 rounded-lg font-semibold text-neutral-700'>{username}</p> }
+          {loading ? <SkeletonLoader width={'image'} /> : <Image className='bg-neutral-200/[0.5] p-2 rounded-lg' width={256} height={256} src={profileAvatar ? profileAvatar : 'https://precisionpharmacy.net/wp-content/themes/apexclinic/images/no-image/No-Image-Found-400x264.png'} /> }
         </div>
       )
     }
