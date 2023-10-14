@@ -62,12 +62,12 @@ export default function Avatar({ uid, url, size, onUpload }) {
           height={size}
           src={avatarUrl}
           alt="Avatar"
-          className="pointer-events-none aspect-square"
+          className="pointer-events-none object-cover object-top aspect-square"
           style={{ height: size, width: size }}
           />
-          <label className='absolute cursor-pointer w-full h-full' htmlFor="single" />
+          <label className='absolute rounded-full cursor-pointer w-full h-full' htmlFor="single" />
           <input
-            className='hidden'
+            className='hidden rounded-full'
             type="file"
             id="single"
             accept="image/*"
@@ -78,9 +78,9 @@ export default function Avatar({ uid, url, size, onUpload }) {
       ) : (
         <div className='flex w-fit justify-center overflow-hidden rounded-full items-center m-auto relative'>
           <Image alt='image placeholder' className="pointer-events-none hover:cursor-pointer aspect-square m-auto object-cover" priority={true} width={144} height={144} src='/noImage.webp' />
-          <label className='absolute cursor-pointer w-full h-full' htmlFor="single" />
+          <label className='absolute rounded-full cursor-pointer w-full h-full' htmlFor="single" />
          <input
-            className='hidden'
+            className='hidden rounded-full'
             type="file"
             id="single"
             accept="image/*"

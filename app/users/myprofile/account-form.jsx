@@ -7,9 +7,13 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import SkeletonLoader from '@/components/SkeletonLoader'
 import { useRouter } from 'next/navigation';
+import PostCard from '@/components/PostCard'
+import moment from 'moment'
+require('moment/locale/es');
+
 
  
-export default function AccountForm({ session }) {
+export default function AccountForm({ session, posts }) {
   const noAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5OuTLrRxelnXyGeD6KieoxUZW7gyffxCr3_La8Qm8&s'
   const router = useRouter();
   const params = useParams()
@@ -20,6 +24,7 @@ export default function AccountForm({ session }) {
   const [username, setUsername] = useState(null)
   const [website, setWebsite] = useState(null)
   const [avatar_url, setAvatarUrl] = useState(null)
+  const [createdAt, setCreatedAt] = useState(null)
   const [profileAvatar, setProfileAvatar] = useState(null)
   const user = session?.user
 
@@ -47,18 +52,18 @@ export default function AccountForm({ session }) {
 
       let { data, error, status } = await supabase
         .from('profiles')
-        .select(`id, full_name, username, avatar_url`)
+        .select(`id, full_name, username, avatar_url, created_at`)
         .eq('id', user.id)
         .single()
       if (error && status !== 406) {
         throw error
       }
-
       if (data) {
         setUserId(data.id)
         setFullname(data.full_name)
         setUsername(data.username)
         setAvatarUrl(data.avatar_url)
+        setCreatedAt(data.created_at)
       }
     } catch (error) {
       alert('Error loading user data!')
@@ -91,10 +96,15 @@ export default function AccountForm({ session }) {
       // here I want to redirect the user, changing the users/[id] of the url to the username
     }
   }
-
+  const timeSince = moment(createdAt, "YYYYMMDD").fromNow();
   return (
-    <div className="form-widget grid grid-cols-6">
-      <div className='flex flex-col gap-2 col-span-6 p-4'>
+    <div className="form-widget grid grid-cols-8 bg-neutral-700">
+      <ul className='col-span-4 p-2 border lg:col-span-6'>
+        {posts?.map((post) => (
+         <PostCard key={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community} date={post.created_at} />
+        ))}
+      </ul>
+      <div className='flex flex-col gap-2 bg-neutral-200 h-[94vh] sm:col-start-5 sm:col-span-4 md:col-start-5 md:col-span-4 lg:col-start-7 lg:col-span-2 col-span-8 p-4'>
         {loading ? <SkeletonLoader width={'image'} /> : (
           <Avatar
           uid={user.id}
@@ -167,6 +177,7 @@ export default function AccountForm({ session }) {
           </div>
         </div>
       )}
+      <div>Creado: {loading ? 'Cargando...' : timeSince}</div>
       </div>
     </div>
   )

@@ -7,12 +7,12 @@ const MainBody = async () => {
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
   const { data: posts } = await supabase.from("posts").select();
-
+  
   return (
-    <div className='col-span-6 bg-neutral-800 border border-neutral-600 rounded-lg md:col-span-4'>
-      <ul>
+    <div className='col-span-6 md:col-span-4'>
+      <ul className='flex flex-col gap-2'>
         {posts?.map((post) => (
-         <PostCard key={post.post_id} title={post.title} image={post.image} user={post.author_name} />
+         <PostCard key={post.post_id} post_id={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community} />
         ))}
       </ul>
     </div>

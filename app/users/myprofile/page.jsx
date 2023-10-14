@@ -6,9 +6,15 @@ export default async function myprofile() {
   const cookieStore = cookies()
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
+  
   const {
     data: { session },
   } = await supabase.auth.getSession()
-
-  return <AccountForm session={session} />
+  
+  const { data: posts } = await supabase
+    .from("posts")
+    .select()
+    .eq('author_id', session.user.id)
+    
+  return <AccountForm session={session} posts={posts} />
 }

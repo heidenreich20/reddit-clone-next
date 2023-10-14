@@ -1,28 +1,86 @@
-
 'use client'
+import PostCard from '@/components/PostCard'
 import { useCallback, useEffect, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import Avatar from '@/components/Avatar'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import SkeletonLoader from '@/components/SkeletonLoader'
-import { useRouter } from 'next/navigation';
 
- 
-export default function AccountForm({ session }) {
-  const router = useRouter();
+export default function AccountForm ({ session }) {
+  const noAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5OuTLrRxelnXyGeD6KieoxUZW7gyffxCr3_La8Qm8&s'
+  const router = useRouter()
   const params = useParams()
   const supabase = createClientComponentClient()
-  const [loading, setLoading] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [fullname, setFullname] = useState(null)
-  const [userId, setUserId] = useState(null)
   const [username, setUsername] = useState(null)
-  const [avatar_url, setAvatarUrl] = useState(null)
+  const [avatarUrl, setAvatarUrl] = useState(null)
+  const [posts, setPosts] = useState(null)
   const [profileAvatar, setProfileAvatar] = useState(null)
   const user = session?.user
 
+  const getProfile = useCallback(async () => {
+    try {
+      setLoading(true)
+
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select('id, full_name, username, website, avatar_url, created_at')
+        .eq('username', params.profile)
+        .single()
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        const { data: fetchedPosts } = await supabase
+          .from('posts')
+          .select('*')
+          .eq('author_name', params.profile)
+          .order('created_at', { ascending: false })
+
+        setFullname(data.full_name)
+        setUsername(data.username)
+        setAvatarUrl(data.avatar_url)
+        setPosts(fetchedPosts)
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-undef
+      alert('Error loading user data!')
+    } finally {
+      checkUserProfile()
+    }
+  }, [user, supabase])
+
   useEffect(() => {
-    async function downloadImage(path) {
+    getProfile()
+  }, [user, getProfile])
+
+  async function checkUserProfile () {
+    try {
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', params.profile)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (user.id === data.id) {
+        // Redirect the user to the correct profile page if the usernames don't match
+        router.replace('http://localhost:3000/users/myprofile')
+      }
+    } catch (error) {
+      console.error('Error checking user profile:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    async function downloadImage (path) {
       try {
         const { data, error } = await supabase.storage.from('avatars').download(path)
         if (error) {
@@ -35,76 +93,39 @@ export default function AccountForm({ session }) {
         console.log('Error downloading image: ', error)
       }
     }
-
-    if (avatar_url) downloadImage(avatar_url)
-  }, [avatar_url, supabase])
-
-  const getProfile = useCallback(async () => {
-    try {
-      setLoading(true)
-
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`id, full_name, username, website, avatar_url`)
-        .eq('username', params.profile)
-        .single()
-      if (error && status !== 406) {
-        throw error
-      }
-
-      if (data) {
-        setUserId(data.id)
-        setFullname(data.full_name)
-        setUsername(data.username)
-        setAvatarUrl(data.avatar_url)
-      }
-    } catch (error) {
-      alert('Error loading user data!')
-    } finally {
-      checkUserProfile();
-    }
-  }, [user, supabase])
-
-  useEffect(() => {
-    getProfile()
-  }, [user, getProfile])
-
-  async function checkUserProfile() {
-    try {
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`id`)
-        .eq('username', params.profile)
-        .single();
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (user.id === data.id) {
-        // Redirect the user to the correct profile page if the usernames don't match
-        router.replace('http://localhost:3000/users/myprofile');
-      }
-    } catch (error) {
-      console.error('Error checking user profile:', error);
-    } finally {
-      setLoading(false)
-    }
-  }
-  
-  // useEffect(() => {
-  //   checkUserProfile();
-  // }, [user.id, params.profile, router]);
+    if (avatarUrl) downloadImage(avatarUrl)
+  }, [avatarUrl, supabase])
 
   return (
-    <div className="form-widget grid grid-cols-6">
-        <div>
-          {loading ? <SkeletonLoader /> : <p className='bg-neutral-200/[0.5] p-2 rounded-lg font-semibold text-neutral-700'>{fullname}</p> }
-          {loading ? <SkeletonLoader /> : <p className='bg-neutral-200/[0.5] p-2 rounded-lg font-semibold text-neutral-700'>{username}</p> }
-          {loading ? <SkeletonLoader width={'image'} /> : <Image alt='user avatar' className='bg-neutral-200/[0.5] p-2 rounded-lg' width={256} height={256} src={profileAvatar ? profileAvatar : 'https://precisionpharmacy.net/wp-content/themes/apexclinic/images/no-image/No-Image-Found-400x264.png'} /> }
-        </div>
+    <div className='form-widget bg-neutral-700 grid grid-cols-8 h-[100vh]'>
+      <ul className='col-span-4 flex flex-col gap-2 p-2 border lg:col-span-6'>
+        {posts?.map((post) => (
+          <PostCard key={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community} date={post.created_at} />
+        ))}
+      </ul>
+      <div className='flex flex-col gap-2 bg-neutral-200 h-[94vh] sm:col-start-5 sm:col-span-4 md:col-start-5 md:col-span-4 lg:col-start-7 lg:col-span-2 col-span-8 p-4'>
+        {loading
+          ? <SkeletonLoader width='image' />
+          : (
+            <div className='rounded-full overflow-hidden'>
+              <Image alt='image placeholder' className='pointer-events-none mx-auto hover:cursor-pointer rounded-full aspect-square object-cover' priority width={144} height={144} src={profileAvatar || noAvatar} />
+            </div>
+            )}
+        {loading
+          ? <SkeletonLoader />
+          : (
+            <div className='bg-neutral-400/[0.5] items-center justify-between flex w-full p-2 rounded-lg font-semibold text-neutral-700'>
+              <p>{fullname}</p>
+            </div>
+            )}
+        {loading
+          ? <SkeletonLoader />
+          : (
+            <div className='bg-neutral-400/[0.5] items-center justify-between flex w-full p-2 rounded-lg font-semibold text-neutral-700'>
+              <p>{username}</p>
+            </div>
+            )}
+      </div>
     </div>
   )
 }
-
-
