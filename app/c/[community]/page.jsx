@@ -15,7 +15,7 @@ const Page = () => {
         const { data: posts, error } = await supabase
           .from('posts')
           .select()
-          .eq('community', community)
+          .eq('community_name', community)
 
         if (error) {
           console.error('Error fetching posts:', error)
@@ -38,11 +38,11 @@ const Page = () => {
             {posts.map((post) => (
               <PostCard
                 key={post.post_id}
-                post_id={post.post_id}
+                postId={post.post_id}
                 title={post.title}
                 image={post.image}
                 user={post.author_name}
-                community={post.community}
+                community={post.community_name}
               />
             ))}
           </ul>

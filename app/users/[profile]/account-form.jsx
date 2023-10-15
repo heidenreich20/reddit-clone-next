@@ -5,18 +5,16 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import SkeletonLoader from '@/components/SkeletonLoader'
+import useProfileAvatar from '@/hooks/useProfileAvatar'
 
 export default function AccountForm ({ session }) {
-  const noAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5OuTLrRxelnXyGeD6KieoxUZW7gyffxCr3_La8Qm8&s'
+  const [userData, setUserData] = useState(null)
+  const { profileAvatar, noAvatar } = useProfileAvatar(userData?.avatar_url)
   const router = useRouter()
   const params = useParams()
   const supabase = createClientComponentClient()
   const [loading, setLoading] = useState(true)
-  const [fullname, setFullname] = useState(null)
-  const [username, setUsername] = useState(null)
-  const [avatarUrl, setAvatarUrl] = useState(null)
   const [posts, setPosts] = useState(null)
-  const [profileAvatar, setProfileAvatar] = useState(null)
   const user = session?.user
 
   const getProfile = useCallback(async () => {
@@ -39,9 +37,7 @@ export default function AccountForm ({ session }) {
           .eq('author_name', params.profile)
           .order('created_at', { ascending: false })
 
-        setFullname(data.full_name)
-        setUsername(data.username)
-        setAvatarUrl(data.avatar_url)
+        setUserData(data)
         setPosts(fetchedPosts)
       }
     } catch (error) {
@@ -79,28 +75,11 @@ export default function AccountForm ({ session }) {
     }
   }
 
-  useEffect(() => {
-    async function downloadImage (path) {
-      try {
-        const { data, error } = await supabase.storage.from('avatars').download(path)
-        if (error) {
-          throw error
-        }
-
-        const url = URL.createObjectURL(data)
-        setProfileAvatar(url)
-      } catch (error) {
-        console.log('Error downloading image: ', error)
-      }
-    }
-    if (avatarUrl) downloadImage(avatarUrl)
-  }, [avatarUrl, supabase])
-
   return (
     <div className='form-widget bg-neutral-700 grid grid-cols-8 h-[100vh]'>
       <ul className='col-span-4 flex flex-col gap-2 p-2 border lg:col-span-6'>
         {posts?.map((post) => (
-          <PostCard key={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community} date={post.created_at} />
+          <PostCard key={post.post_id} postId={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community_name} date={post.created_at} />
         ))}
       </ul>
       <div className='flex flex-col gap-2 bg-neutral-200 h-[94vh] sm:col-start-5 sm:col-span-4 md:col-start-5 md:col-span-4 lg:col-start-7 lg:col-span-2 col-span-8 p-4'>
@@ -115,14 +94,14 @@ export default function AccountForm ({ session }) {
           ? <SkeletonLoader />
           : (
             <div className='bg-neutral-400/[0.5] items-center justify-between flex w-full p-2 rounded-lg font-semibold text-neutral-700'>
-              <p>{fullname}</p>
+              <p>{userData.full_name}</p>
             </div>
             )}
         {loading
           ? <SkeletonLoader />
           : (
             <div className='bg-neutral-400/[0.5] items-center justify-between flex w-full p-2 rounded-lg font-semibold text-neutral-700'>
-              <p>{username}</p>
+              <p>{userData.username}</p>
             </div>
             )}
       </div>

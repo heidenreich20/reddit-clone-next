@@ -1,31 +1,13 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
+import useProfileAvatar from '@/hooks/useProfileAvatar'
 
-export default function Avatar({ uid, url, size, onUpload }) {
+export default function Avatar ({ uid, url, size, onUpload }) {
+  const { profileAvatar, noAvatar } = useProfileAvatar(url)
   const supabase = createClientComponentClient()
-  const [avatarUrl, setAvatarUrl] = useState(null)
   const [uploading, setUploading] = useState(false)
-  const noAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5OuTLrRxelnXyGeD6KieoxUZW7gyffxCr3_La8Qm8&s'
-
-  useEffect(() => {
-    async function downloadImage(path) {
-      try {
-        const { data, error } = await supabase.storage.from('avatars').download(path)
-        if (error) {
-          throw error
-        }
-
-        const url = URL.createObjectURL(data)
-        setAvatarUrl(url)
-      } catch (error) {
-        console.log('Error downloading image: ', error)
-      }
-    }
-
-    if (url) downloadImage(url)
-  }, [url, supabase])
 
   const uploadAvatar = async (event) => {
     try {
@@ -39,7 +21,7 @@ export default function Avatar({ uid, url, size, onUpload }) {
       const fileExt = file.name.split('.').pop()
       const filePath = `${uid}-${Math.random()}.${fileExt}`
 
-      let { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
       if (uploadError) {
         throw uploadError
@@ -47,6 +29,7 @@ export default function Avatar({ uid, url, size, onUpload }) {
 
       onUpload(filePath)
     } catch (error) {
+      // eslint-disable-next-line no-undef
       alert(error)
     } finally {
       setUploading(false)
@@ -55,40 +38,42 @@ export default function Avatar({ uid, url, size, onUpload }) {
 
   return (
     <div>
-      {avatarUrl ? (
-        <div className='flex shadow-md cursor-pointer overflow-hidden shadow-neutral-400 rounded-full w-fit justify-center items-center m-auto relative'>
-          <Image
-          width={size}
-          height={size}
-          src={avatarUrl}
-          alt="Avatar"
-          className="pointer-events-none object-cover object-top aspect-square"
-          style={{ height: size, width: size }}
-          />
-          <label className='absolute rounded-full cursor-pointer w-full h-full' htmlFor="single" />
-          <input
-            className='hidden rounded-full'
-            type="file"
-            id="single"
-            accept="image/*"
-            onChange={uploadAvatar}
-            disabled={uploading}
-          />
-        </div>
-      ) : (
-        <div className='flex w-fit justify-center overflow-hidden rounded-full items-center m-auto relative'>
-          <Image alt='image placeholder' className="pointer-events-none hover:cursor-pointer aspect-square m-auto object-cover" priority={true} width={144} height={144} src='/noImage.webp' />
-          <label className='absolute rounded-full cursor-pointer w-full h-full' htmlFor="single" />
-         <input
-            className='hidden rounded-full'
-            type="file"
-            id="single"
-            accept="image/*"
-            onChange={uploadAvatar}
-            disabled={uploading}
-          />
-        </div>
-      )}
+      {profileAvatar
+        ? (
+          <div className='flex shadow-md cursor-pointer overflow-hidden shadow-neutral-400 rounded-full w-fit justify-center items-center m-auto relative'>
+            <Image
+              width={size}
+              height={size}
+              src={profileAvatar || noAvatar}
+              alt='Avatar'
+              className='pointer-events-none object-cover object-top aspect-square'
+              style={{ height: size, width: size }}
+            />
+            <label className='absolute rounded-full cursor-pointer w-full h-full' htmlFor='single' />
+            <input
+              className='hidden rounded-full'
+              type='file'
+              id='single'
+              accept='image/*'
+              onChange={uploadAvatar}
+              disabled={uploading}
+            />
+          </div>
+          )
+        : (
+          <div className='flex w-fit justify-center overflow-hidden rounded-full items-center m-auto relative'>
+            <Image alt='image placeholder' className='pointer-events-none hover:cursor-pointer aspect-square m-auto object-cover' priority width={144} height={144} src='/noImage.webp' />
+            <label className='absolute rounded-full cursor-pointer w-full h-full' htmlFor='single' />
+            <input
+              className='hidden rounded-full'
+              type='file'
+              id='single'
+              accept='image/*'
+              onChange={uploadAvatar}
+              disabled={uploading}
+            />
+          </div>
+          )}
     </div>
   )
 }

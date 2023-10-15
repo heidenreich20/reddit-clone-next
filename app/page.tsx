@@ -1,9 +1,6 @@
-import LogoutButton from '../components/LogoutButton'
 // import SupabaseLogo from '../components/SupabaseLogo'
 // import NextJsLogo from '../components/NextJsLogo'
-import DeployButton from '../components/DeployButton'
 import Dashboard from '@/components/Dashboard'
-
 
 // export const dynamic = 'force-dynamic'
 
@@ -186,7 +183,6 @@ import Dashboard from '@/components/Dashboard'
 //   )
 // }
 import MainBody from '@/components/MainBody'
-
 
 export default async function Home () {
   return (

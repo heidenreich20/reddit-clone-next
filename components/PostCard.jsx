@@ -6,6 +6,7 @@ require('moment/locale/es')
 
 const PostCard = ({ title, image, comments, votes, user, community, date, postId }) => {
   const timeSince = moment(date, 'YYYYMMDD').fromNow()
+
   return (
     <div className='flex border p-2 border-neutral-600 bg-neutral-800 rounded-lg flex-col md:flex-row'>
       <div className='flex gap-0 md:gap-6'>
@@ -25,7 +26,7 @@ const PostCard = ({ title, image, comments, votes, user, community, date, postId
         </div>
         <div className='text-white w-full flex flex-col gap-2'>
           <div className='flex justify-between py-2 flex-col h-full'>
-            <Link href={`/posts/${postId}`} className='font-semibold font-impact'>{title}</Link>
+            <Link href={`/c/${community}/${postId}`} className='font-semibold font-impact'>{title}</Link>
             <div className='flex gap-1 md:items-center'>
               <div className='flex items-center gap-1'>
                 <Link href={`/c/${community}`} className='font-bold font-impact text-xs'>{community}</Link>

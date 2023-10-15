@@ -1,10 +1,7 @@
 import './globals.css'
 import Navbar from '@/components/Navbar'
-import { Inter } from 'next/font/google'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Reddit clone',
@@ -16,7 +13,7 @@ export default async function RootLayout ({ children }) {
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
   const {
-    data: { session },
+    data: { session }
   } = await supabase.auth.getSession()
 
   return (
@@ -28,4 +25,3 @@ export default async function RootLayout ({ children }) {
     </html>
   )
 }
-
