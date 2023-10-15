@@ -94,14 +94,14 @@ export default function AccountForm ({ session }) {
           ? <SkeletonLoader />
           : (
             <div className='bg-neutral-400/[0.5] items-center justify-between flex w-full p-2 rounded-lg font-semibold text-neutral-700'>
-              <p>{userData.full_name}</p>
+              <p>{userData?.full_name}</p>
             </div>
             )}
         {loading
           ? <SkeletonLoader />
           : (
             <div className='bg-neutral-400/[0.5] items-center justify-between flex w-full p-2 rounded-lg font-semibold text-neutral-700'>
-              <p>{userData.username}</p>
+              <p>{userData?.username}</p>
             </div>
             )}
       </div>

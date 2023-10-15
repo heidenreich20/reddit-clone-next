@@ -1,6 +1,4 @@
-'use client'
 import React from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import LogoutButton from './LogoutButton'
@@ -11,25 +9,25 @@ const noImage = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgH
 const NavbarAvatar = () => {
   const { avatarUrl, user } = useNavbarAvatar()
 
-  console.log(avatarUrl)
   return (
-   <>
-    {!user ? (
-      <div className="flex text-white items-center gap-2">
-        Hey, {'Guest'}! <Image className='object-cover rounded-full' width={32} height={32} src={avatarUrl || noImage} />
-        <LogoutButton />
-      </div>
-    ) : (
-      <Link
-        href="/login"
-        className="py-2 px-3 bg-purple-500 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-      >
-        Login
-      </Link>
-    )}
-   </>
+    <>
+      {!user
+        ? (
+          <div className='flex text-white items-center gap-2'>
+            Hey, 'Guest'! <Image className='object-cover rounded-full' width={32} height={32} src={avatarUrl || noImage} />
+            <LogoutButton />
+          </div>
+          )
+        : (
+          <Link
+            href='/login'
+            className='py-2 px-3 bg-purple-500 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'
+          >
+            Login
+          </Link>
+          )}
+    </>
   )
 }
 
 export default NavbarAvatar
-

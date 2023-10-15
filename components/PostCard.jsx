@@ -4,14 +4,14 @@ import Link from 'next/link'
 const notFound = 'data:image/jpeg;base64,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'
 require('moment/locale/es')
 
-const PostCard = ({ title, image, comments, votes, user, community, date, postId }) => {
+const PostCard = ({ title, image, comments, votes, route, user, community, date, postId }) => {
   const timeSince = moment(date, 'YYYYMMDD').fromNow()
 
   return (
-    <div className='flex border p-2 border-neutral-600 bg-neutral-800 rounded-lg flex-col md:flex-row'>
-      <div className='flex gap-0 md:gap-6'>
-        <div className='flex gap-2 items-center'>
-          <div className='hidden md:block'>
+    <div className='border p-2 border-neutral-600 bg-neutral-800 rounded-lg flex-col md:flex-row'>
+      <div className='grid grid-cols-6 gap-6 col-span-6'>
+        <div className='hidden md:flex gap-2 md:col-span-1 items-center'>
+          <div className='md:block'>
             <svg className='stroke-neutral-400 w-8 cursor-pointer' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
             </svg>
@@ -20,16 +20,16 @@ const PostCard = ({ title, image, comments, votes, user, community, date, postId
               <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
             </svg>
           </div>
-          <div>
-            <Image className='hidden md:block aspect-video object-cover rounded-lg' width={220} height={220} src={image || notFound} alt='random image' />
+          <div className=''>
+            <Image className='hidden md:flex aspect-video rounded-lg' width={200} height={200} src={image || notFound} alt='random image' />
           </div>
         </div>
-        <div className='text-white w-full flex flex-col gap-2'>
+        <div className='text-white col-span-5 w-full flex flex-col gap-2'>
           <div className='flex justify-between py-2 flex-col h-full'>
-            <Link href={`/c/${community}/${postId}`} className='font-semibold font-impact'>{title}</Link>
+            <Link href={route || '/'} className='font-semibold font-impact'>{title}</Link>
             <div className='flex gap-1 md:items-center'>
               <div className='flex items-center gap-1'>
-                <Link href={`/c/${community}`} className='font-bold font-impact text-xs'>{community}</Link>
+                <Link href={`/c/${community}`} className='font-bold font-impact text-xs'>{`c/${community}`}</Link>
               </div>
               <p className='text-xs text-neutral-400 font-impact'>Publicado por <Link href={`users/${user}`}>{user}</Link></p>
               <p className='text-xs text-neutral-400 font-impact'>{timeSince}</p>
@@ -43,8 +43,8 @@ const PostCard = ({ title, image, comments, votes, user, community, date, postId
           </div>
         </div>
       </div>
-      <div className='flex flex-col gap-2'>
-        <Image className='mt-5 md:hidden aspect-video object-cover rounded-lg' width={500} height={380} src={image || notFound} alt='random image' />
+      <div className='flex md:hidden col-span-6 flex-col gap-2'>
+        <Image className='mt-5 aspect-video object-cover rounded-lg' width={500} height={380} src={image || notFound} alt='random image' />
         <div className='flex items-center text-neutral-400 font-impact font-semibold gap-3 md:hidden'>
           <div className='flex'>
             <svg className='stroke-neutral-400 w-8 cursor-pointer' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>

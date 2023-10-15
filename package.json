@@ -26,7 +26,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "./node_modules/standard/eslintrc.json"
+      "./node_modules/standard/eslintrc.json",
+      "eslint:recommended"
     ]
   }
 }
