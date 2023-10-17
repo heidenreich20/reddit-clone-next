@@ -8,7 +8,7 @@ const MainBody = async () => {
 
   const { data: posts } = await supabase.from('posts').select()
   return (
-    <div className='col-span-6 md:col-span-4'>
+    <div className='col-span-6 md:col-span-3 md:col-start-2'>
       <ul className='flex flex-col gap-2'>
         {posts?.map((post) => (
           <PostCard key={post.post_id} route={`/c/${post.community_name}/${post.post_id}`} title={post.title} image={post.image} user={post.author_name} community={post.community_name} date={post.created_at} />

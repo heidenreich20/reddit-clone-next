@@ -40,3 +40,12 @@
     transform: translateY(0);
   }
 }
+
+.markdown > * {
+  all: revert;
+}
+
+.markdown img {
+  max-width: 250px;
+  margin: auto;
+}

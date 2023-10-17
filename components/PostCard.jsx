@@ -9,8 +9,8 @@ const PostCard = ({ title, image, comments, votes, route, user, community, date,
 
   return (
     <div className='border p-2 border-neutral-600 bg-neutral-800 rounded-lg flex-col md:flex-row'>
-      <div className='grid grid-cols-6 gap-6 col-span-6'>
-        <div className='hidden md:flex gap-2 md:col-span-1 items-center'>
+      <div className='grid grid-cols-8 gap-6'>
+        <div className='hidden xl:flex gap-2 col-span-3 xl:col-span-2 items-center'>
           <div className='md:block'>
             <svg className='stroke-neutral-400 w-8 cursor-pointer' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
               <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
@@ -20,12 +20,12 @@ const PostCard = ({ title, image, comments, votes, route, user, community, date,
               <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
             </svg>
           </div>
-          <div className=''>
-            <Image className='hidden md:flex aspect-video rounded-lg' width={200} height={200} src={image || notFound} alt='random image' />
+          <div>
+            <Image className='hidden object-cover md:flex aspect-video rounded-lg' width={500} height={500} src={image || notFound} alt='random image' />
           </div>
         </div>
-        <div className='text-white col-span-5 w-full flex flex-col gap-2'>
-          <div className='flex justify-between py-2 flex-col h-full'>
+        <div className='text-white col-span-6 lg:col-span-5 w-full flex flex-col gap-2'>
+          <div className='flex gap-2 justify-between py-2 flex-col h-full'>
             <Link href={route || '/'} className='font-semibold font-impact'>{title}</Link>
             <div className='flex gap-1 md:items-center'>
               <div className='flex items-center gap-1'>
@@ -43,7 +43,7 @@ const PostCard = ({ title, image, comments, votes, route, user, community, date,
           </div>
         </div>
       </div>
-      <div className='flex md:hidden col-span-6 flex-col gap-2'>
+      <div className='flex xl:hidden col-span-6 flex-col gap-2'>
         <Image className='mt-5 aspect-video object-cover rounded-lg' width={500} height={380} src={image || notFound} alt='random image' />
         <div className='flex items-center text-neutral-400 font-impact font-semibold gap-3 md:hidden'>
           <div className='flex'>

@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
+import { remark } from 'remark'
+import html from 'remark-html'
 
 export default function useFetchComments (supabase, params) {
   const [postComments, setPostComments] = useState([])
+  const [markdown, setMarkdown] = useState([])
 
   const fetchComments = async () => {
     try {
@@ -14,6 +17,11 @@ export default function useFetchComments (supabase, params) {
       if (error) {
         console.error('Error fetching comments:', error)
       } else {
+        const processedContent = await remark()
+          .use(html)
+          .process(comments.body)
+        const contentHtml = processedContent.toString()
+        setMarkdown(contentHtml)
         setPostComments(comments)
       }
     } catch (error) {
@@ -26,5 +34,5 @@ export default function useFetchComments (supabase, params) {
     fetchComments()
   }, [supabase])
 
-  return { postComments, fetchComments } // Expose the fetchComments function
+  return { postComments, fetchComments, markdown } // Expose the fetchComments function
 }
