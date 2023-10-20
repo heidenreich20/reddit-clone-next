@@ -74,12 +74,12 @@ export default function AccountForm ({ session, posts }) {
   const timeSince = moment(createdAt, 'YYYYMMDD').fromNow()
   return (
     <div className='form-widget grid grid-cols-8 bg-neutral-700'>
-      <ul className='col-span-4 p-2 border lg:col-span-6'>
+      <ul className='col-span-4 p-4 flex flex-col gap-2 lg:col-span-6'>
         {posts?.map((post) => (
-          <PostCard key={post.post_id} route={`/c/${post.community_name}/${post.post_id}`} postId={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community_name} date={post.created_at} />
+          <PostCard key={post.post_id} session={session} route={`/c/${post.community_name}/${post.post_id}`} postId={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community_name} date={post.created_at} upvotes={post.upvotes} downvotes={post.downvotes} />
         ))}
       </ul>
-      <div className='flex flex-col gap-2 bg-neutral-200 h-[94vh] sm:col-start-5 sm:col-span-4 md:col-start-5 md:col-span-4 lg:col-start-7 lg:col-span-2 col-span-8 p-4'>
+      <div className='flex flex-col gap-2 bg-neutral-200 sm:col-start-5 sm:col-span-4 md:col-start-5 md:col-span-4 lg:col-start-7 lg:col-span-2 col-span-8 p-4'>
         {loading
           ? <SkeletonLoader width='image' />
           : (

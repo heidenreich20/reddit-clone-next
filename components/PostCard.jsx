@@ -1,27 +1,231 @@
+'use client'
+import { useState, useEffect } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
-const notFound = 'data:image/jpeg;base64,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'
+const notFound = 'data:image/jpeg;base64,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'
 require('moment/locale/es')
 
-const PostCard = ({ title, image, comments, votes, route, user, community, date, postId }) => {
+const PostCard = ({ title, image, session, voteData, version, upvotes, downvotes, route, username, community, date, postId }) => {
+  const [votes, setVotes] = useState(upvotes - downvotes)
+  const [isUpvoted, setIsUpvoted] = useState(false)
+  const [isDownvoted, setIsDownvoted] = useState(false)
+  const [commentCount, setCommentCount] = useState(false)
+  const supabase = createClientComponentClient()
   const timeSince = moment(date, 'YYYYMMDD').fromNow()
 
+  const optimisticLocking = async () => {
+    const currentVersion = version
+    const increaseUpvote = upvotes + 1
+    const decreaseDownvote = downvotes - 1
+
+    const newVersion = Date.now()
+
+    // 4. Attempt to upvote the item
+    const { error: updateError } = await supabase
+      .from('posts')
+      .update({
+        downvotes: decreaseDownvote,
+        upvotes: increaseUpvote,
+        version: newVersion
+      })
+      .eq('post_id', postId)
+
+    // 5. Handle conflicts
+    const { versionCheck } = await supabase
+      .from('posts')
+      .select('version')
+      .eq('post_id', postId)
+    if (versionCheck !== currentVersion) {
+      optimisticLocking()
+    } else {
+      console.error('Error upvoting the item:', updateError)
+    }
+  }
+
+  useEffect(() => {
+    const checkVotes = () => {
+      if (voteData?.post_id === postId && voteData?.vote_type === 'upvoted') {
+        setIsUpvoted(true)
+      } else if (voteData?.post_id === postId && voteData?.vote_type === 'downvoted') {
+        setIsDownvoted(true)
+      }
+    }
+    checkVotes()
+  }, [])
+
+  useEffect(() => {
+    const fetchComments = async (postId) => {
+      try {
+        const { data, error } = await supabase
+          .from('comments')
+          .select()
+          .eq('post_id', postId)
+        if (error) {
+          console.log(error)
+        } else {
+          setCommentCount(data.length)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchComments(postId)
+  }, [])
+
+  const handleUpvote = async () => {
+    if (session) {
+      if (isDownvoted) {
+        const reduceDownvote = downvotes - 1
+        const increaseUpvote = upvotes + 1
+        const { error: voteFetchError } = await supabase
+          .from('posts')
+          .update({
+            downvotes: reduceDownvote,
+            upvotes: increaseUpvote
+          })
+          .eq('post_id', postId)
+        const { error } = await supabase
+          .from('voted_posts')
+          .update({
+            vote_type: 'upvoted'
+          })
+          .eq('vote_id', session.user.id + postId)
+        if (voteFetchError || error) {
+          console.log(voteFetchError)
+        }
+        setVotes(votes + 2)
+        setIsUpvoted(true)
+        setIsDownvoted(false)
+      } else if (!isUpvoted) {
+        const newUpvote = upvotes + 1
+        const { error: voteFetchError } = await supabase
+          .from('posts')
+          .update({
+            upvotes: newUpvote
+          })
+          .eq('post_id', postId)
+        const { error } = await supabase
+          .from('voted_posts')
+          .upsert({
+            vote_type: 'upvoted',
+            user_id: session.user.id,
+            post_id: postId,
+            vote_id: session.user.id + postId
+          })
+        if (voteFetchError || error) {
+          console.log(voteFetchError)
+        }
+        setVotes(votes + 1)
+        setIsUpvoted(true)
+      } else if (isUpvoted) {
+        const newUpvote = upvotes - 1
+        const { error: voteFetchError } = await supabase
+          .from('posts')
+          .update({ upvotes: newUpvote })
+          .eq('post_id', postId)
+        const { error } = await supabase
+          .from('voted_posts')
+          .delete()
+          .eq('vote_id', session.user.id + postId)
+        if (voteFetchError || error) {
+          console.log(voteFetchError)
+        }
+        setVotes(votes - 1)
+        setIsUpvoted(false)
+      }
+    } else {
+      alert('You must be logged in to vote')
+    }
+  }
+
+  const handleDownvote = async () => {
+    if (session) {
+      if (isUpvoted) {
+        const increaseDownvote = downvotes + 1
+        const decreaseUpvote = upvotes - 1
+        const { error: voteFetchError } = await supabase
+          .from('posts')
+          .update({
+            downvotes: increaseDownvote,
+            upvotes: decreaseUpvote
+          })
+          .eq('post_id', postId)
+        const { error } = await supabase
+          .from('voted_posts')
+          .update({
+            vote_type: 'downvoted'
+          })
+          .eq('vote_id', session.user.id + postId)
+        if (voteFetchError || error) {
+          console.log(voteFetchError)
+        }
+        setVotes(votes - 2)
+        setIsUpvoted(false)
+        setIsDownvoted(true)
+      } else if (!isDownvoted) {
+        const increaseDownvote = downvotes + 1
+        const { error: voteFetchError } = await supabase
+          .from('posts')
+          .update({
+            downvotes: increaseDownvote
+          })
+          .eq('post_id', postId)
+        const { error } = await supabase
+          .from('voted_posts')
+          .upsert({
+            vote_type: 'downvoted',
+            user_id: session.user.id,
+            post_id: postId,
+            vote_id: session.user.id + postId
+          })
+        if (voteFetchError || error) {
+          console.log(voteFetchError)
+        }
+        setVotes(votes - 1)
+        setIsDownvoted(true)
+      } else if (isDownvoted) {
+        const decreaseDownvote = downvotes - 1
+        const { error: voteFetchError } = await supabase
+          .from('posts')
+          .update({ downvotes: decreaseDownvote })
+          .eq('post_id', postId)
+        const { error } = await supabase
+          .from('voted_posts')
+          .delete()
+          .eq('vote_id', session.user.id + postId)
+        if (voteFetchError || error) {
+          console.log(voteFetchError)
+        }
+        setVotes(votes + 1)
+        setIsDownvoted(false)
+      }
+    } else {
+      alert('You must be logged in to vote')
+    }
+  }
   return (
     <div className='border p-2 border-neutral-600 bg-neutral-800 rounded-lg flex-col md:flex-row'>
       <div className='grid grid-cols-8 gap-6'>
         <div className='hidden xl:flex gap-2 col-span-3 xl:col-span-2 items-center'>
           <div className='md:block'>
-            <svg className='stroke-neutral-400 w-8 cursor-pointer' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-              <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
-            </svg>
-            <p className='flex justify-center text-neutral-100'>{votes || 0}</p>
-            <svg className='stroke-neutral-400 w-8 rotate-180 cursor-pointer' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-              <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
-            </svg>
+            <button onClick={() => { handleUpvote() }}>
+              <svg className={`${isUpvoted ? 'stroke-purple-600' : 'stroke-neutral-400'} w-8 cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/sv'>
+                <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
+              </svg>
+            </button>
+            <p className='flex justify-center text-neutral-100'>{votes}</p>
+            <button onClick={() => { handleDownvote() }}>
+              <svg className={`${isDownvoted ? 'stroke-purple-600' : 'stroke-neutral-400'} w-8 rotate-180 cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
+              </svg>
+            </button>
           </div>
           <div>
-            <Image className='hidden object-cover md:flex aspect-video rounded-lg' width={500} height={500} src={image || notFound} alt='random image' />
+            {!image
+              ? <svg className='w-full stroke-neutral-500 fill-none aspect-video bg-neutral-700 rounded-lg' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg' fill='inherit'><g id='SVGRepo_bgCarrier' strokeWidth='0' /><g id='SVGRepo_tracerCarrier' strokeLinecap='round' strokeLinejoin='round' stroke='inherit' strokeWidth='0.192' /><g id='SVGRepo_iconCarrier'> <path stroke='inherit' strokeLinejoin='round' strokeWidth='1' d='M6 5a2 2 0 012-2h16a2 2 0 012 2v22a2 2 0 01-2 2H8a2 2 0 01-2-2V5z' /> <path stroke='inherit' strokeLinecap='round' strokeLinejoin='round' strokeWidth='1' d='M10 9h4M10 16h12M10 20h12M10 24h4' /> <circle cx='22' cy='9' r='1' fill='inherit' /> </g></svg>
+              : <Image className='hidden object-cover md:flex aspect-video rounded-lg' width={500} height={500} src={image} alt='random image' />}
           </div>
         </div>
         <div className='text-white col-span-6 lg:col-span-5 w-full flex flex-col gap-2'>
@@ -31,14 +235,14 @@ const PostCard = ({ title, image, comments, votes, route, user, community, date,
               <div className='flex items-center gap-1'>
                 <Link href={`/c/${community}`} className='font-bold font-impact text-xs'>{`c/${community}`}</Link>
               </div>
-              <p className='text-xs text-neutral-400 font-impact'>Publicado por <Link href={`users/${user}`}>{user}</Link></p>
+              <p className='text-xs text-neutral-400 font-impact'>Publicado por <Link href={`users/${username}`}>{username}</Link></p>
               <p className='text-xs text-neutral-400 font-impact'>{timeSince}</p>
             </div>
             <div className='flex gap-1 items-center'>
               <svg className='w-4 stroke-neutral-400 fill-neutral-400 stroke-2' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 50 50'>
                 <path d='M 25 4.0625 C 12.414063 4.0625 2.0625 12.925781 2.0625 24 C 2.0625 30.425781 5.625 36.09375 11 39.71875 C 10.992188 39.933594 11 40.265625 10.71875 41.3125 C 10.371094 42.605469 9.683594 44.4375 8.25 46.46875 L 7.21875 47.90625 L 9 47.9375 C 15.175781 47.964844 18.753906 43.90625 19.3125 43.25 C 21.136719 43.65625 23.035156 43.9375 25 43.9375 C 37.582031 43.9375 47.9375 35.074219 47.9375 24 C 47.9375 12.925781 37.582031 4.0625 25 4.0625 Z M 25 5.9375 C 36.714844 5.9375 46.0625 14.089844 46.0625 24 C 46.0625 33.910156 36.714844 42.0625 25 42.0625 C 22.996094 42.0625 21.050781 41.820313 19.21875 41.375 L 18.65625 41.25 L 18.28125 41.71875 C 18.28125 41.71875 15.390625 44.976563 10.78125 45.75 C 11.613281 44.257813 12.246094 42.871094 12.53125 41.8125 C 12.929688 40.332031 12.9375 39.3125 12.9375 39.3125 L 12.9375 38.8125 L 12.5 38.53125 C 7.273438 35.21875 3.9375 29.941406 3.9375 24 C 3.9375 14.089844 13.28125 5.9375 25 5.9375 Z' />
               </svg>
-              <p className='text-xs text-neutral-400 font-semibold hidden md:block font-impact'>{`comments ${comments || 0}`}</p>
+              <Link href={route || '/'} className='text-xs text-neutral-400 font-semibold hidden md:block font-impact'>{`comments ${commentCount || 0}`}</Link>
             </div>
           </div>
         </div>
@@ -58,7 +262,7 @@ const PostCard = ({ title, image, comments, votes, route, user, community, date,
             <svg className='w-4 stroke-neutral-400 fill-neutral-400 stroke-2' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 50 50'>
               <path d='M 25 4.0625 C 12.414063 4.0625 2.0625 12.925781 2.0625 24 C 2.0625 30.425781 5.625 36.09375 11 39.71875 C 10.992188 39.933594 11 40.265625 10.71875 41.3125 C 10.371094 42.605469 9.683594 44.4375 8.25 46.46875 L 7.21875 47.90625 L 9 47.9375 C 15.175781 47.964844 18.753906 43.90625 19.3125 43.25 C 21.136719 43.65625 23.035156 43.9375 25 43.9375 C 37.582031 43.9375 47.9375 35.074219 47.9375 24 C 47.9375 12.925781 37.582031 4.0625 25 4.0625 Z M 25 5.9375 C 36.714844 5.9375 46.0625 14.089844 46.0625 24 C 46.0625 33.910156 36.714844 42.0625 25 42.0625 C 22.996094 42.0625 21.050781 41.820313 19.21875 41.375 L 18.65625 41.25 L 18.28125 41.71875 C 18.28125 41.71875 15.390625 44.976563 10.78125 45.75 C 11.613281 44.257813 12.246094 42.871094 12.53125 41.8125 C 12.929688 40.332031 12.9375 39.3125 12.9375 39.3125 L 12.9375 38.8125 L 12.5 38.53125 C 7.273438 35.21875 3.9375 29.941406 3.9375 24 C 3.9375 14.089844 13.28125 5.9375 25 5.9375 Z' />
             </svg>
-            <p className='text-sm block md:hidden font-impact'>{`comments ${comments || 0}`}</p>
+            <p className='text-sm block md:hidden font-impact'>{`comments ${commentCount || 0}`}</p>
           </div>
         </div>
       </div>

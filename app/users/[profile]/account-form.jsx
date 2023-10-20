@@ -23,13 +23,13 @@ export default function AccountForm ({ session }) {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select('id, full_name, username, website, avatar_url, created_at')
+        .select('id, full_name, username, website, avatar_url, created_at, voted_posts')
         .eq('username', params.profile)
         .single()
+      console.log(data)
       if (error && status !== 406) {
         throw error
       }
-
       if (data) {
         const { data: fetchedPosts } = await supabase
           .from('posts')
@@ -76,8 +76,8 @@ export default function AccountForm ({ session }) {
   }
 
   return (
-    <div className='form-widget bg-neutral-700 grid grid-cols-8 h-[100vh]'>
-      <ul className='col-span-4 flex flex-col gap-2 p-2 border lg:col-span-6'>
+    <div className='form-widget bg-neutral-700 grid grid-cols-8'>
+      <ul className='col-span-4 flex flex-col gap-2 p-2 lg:col-span-6'>
         {posts?.map((post) => (
           <PostCard key={post.post_id} postId={post.post_id} title={post.title} image={post.image} user={post.author_name} community={post.community_name} date={post.created_at} />
         ))}

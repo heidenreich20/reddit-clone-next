@@ -1,5 +1,4 @@
 import Dashboard from '@/components/Dashboard'
-
 import MainBody from '@/components/MainBody'
 
 export default async function Home () {

@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/NavbarAvatar.jsx", "app/login/page.jsx", "app/layout.jsx", "hooks/useFetchComments.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/NavbarAvatar.jsx", "app/login/page.jsx", "app/layout.jsx", "hooks/useFetchComments.jsx", "app/api/route.js"],
   "exclude": ["node_modules"]
 }

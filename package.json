@@ -9,6 +9,7 @@
     "@supabase/auth-helpers-nextjs": "latest",
     "@supabase/supabase-js": "latest",
     "@uiw/react-md-editor": "^3.24.1",
+    "amqplib": "^0.10.3",
     "autoprefixer": "10.4.15",
     "moment": "^2.29.4",
     "next": "latest",
