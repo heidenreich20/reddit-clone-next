@@ -11,38 +11,70 @@ const Navbar = ({ session }) => {
   const [loading, setLoading] = useState(true)
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [avatar, setAvatar] = useState(null)
+  const [subbedCommunities, setSubbedCommunities] = useState(null)
   const [username, setUsername] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
   const user = session?.user
 
   const getProfile = useCallback(async () => {
-    try {
-      setLoading(true)
+    if (session) {
+      try {
+        setLoading(true)
 
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select('username, avatar_url')
-        .eq('id', user?.id)
-        .single()
+        const { data, error, status } = await supabase
+          .from('profiles')
+          .select('username, avatar_url')
+          .eq('id', user?.id)
+          .single()
 
-      if (error && status !== 406) {
-        throw error
+        if (error && status !== 406) {
+          throw error
+        }
+
+        if (data) {
+          setUsername(data.username)
+          setAvatarUrl(data.avatar_url)
+        }
+      } catch (error) {
+        console.log(error.message)
+      } finally {
+        setLoading(false)
       }
-
-      if (data) {
-        setUsername(data.username)
-        setAvatarUrl(data.avatar_url)
-      }
-    } catch (error) {
-      console.log(error.message)
-    } finally {
-      setLoading(false)
     }
   }, [user, supabase])
 
   useEffect(() => {
     getProfile()
   }, [user, getProfile, supabase])
+
+  const getSubedCommunities = useCallback(async () => {
+    if (session) {
+      try {
+        setLoading(true)
+
+        const { data, error, status } = await supabase
+          .from('subbed_communities')
+          .select()
+          .eq('user_id', user?.id)
+
+        if (error && status !== 406) {
+          throw error
+        }
+
+        if (data) {
+          setSubbedCommunities(data)
+        }
+      } catch (error) {
+        console.log(error.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+  }, [user, supabase])
+
+  useEffect(() => {
+    getSubedCommunities()
+  }, [user, getSubedCommunities, supabase])
 
   useEffect(() => {
     async function downloadImage (path) {
@@ -78,9 +110,14 @@ const Navbar = ({ session }) => {
             <Link href='/'>
               <svg className='absolute h-full p-1 fill-white icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
             </Link>
-            <button onClick={() => { setIsOpen(!isOpen) }} className='bg-neutral-600 px-2 py-1 rounded-t-lg w-56 text-white'>Principal</button>
-            <div className={`${isOpen ? 'block' : 'hidden'} absolute bg-neutral-600 w-56 text-center font-bold text-white`}>
-              <Link href='c/News'>News</Link>
+            <button onClick={() => { setIsOpen(!isOpen) }} className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} bg-neutral-600 px-2 py-1 w-56 text-white`}>Principal</button>
+            <div className={`${isOpen ? 'block' : 'hidden'} absolute rounded-b-lg border-neutral-500 border-t bg-neutral-600 w-56 text-center font-bold text-white`}>
+              {subbedCommunities?.map((sub) => (
+                <div className='flex items-center px-3' key={sub.id}>
+                  <Image alt='community icon' className='w-8 rounded-full' width={50} height={50} src={sub.community_icon} />
+                  <Link href={`/c/${sub?.community_name}`}>{sub.community_name}</Link>
+                </div>
+              ))}
             </div>
           </div>
         </section>
