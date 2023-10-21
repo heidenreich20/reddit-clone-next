@@ -44,6 +44,8 @@ const Page = () => {
                 user={post.author_name}
                 community={post.community_name}
                 date={post.created_at}
+                upvotes={post.upvotes}
+                downvotes={post.downvotes}
               />
             ))}
           </ul>
