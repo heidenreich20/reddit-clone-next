@@ -1,56 +1,18 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useParams } from 'next/navigation'
-import PostCard from '@/components/PostCard'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+import CommunityPosts from './CommunityPosts'
 
-const Page = () => {
-  const supabase = createClientComponentClient()
-  const { community } = useParams()
-  const [posts, setPosts] = useState([])
+export default async function myprofile () {
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const { data: posts, error } = await supabase
-          .from('posts')
-          .select()
-          .eq('community_name', community)
-
-        if (error) {
-          console.error('Error fetching posts:', error)
-        } else {
-          setPosts(posts)
-        }
-      } catch (error) {
-        console.error('Error fetching posts:', error)
-      }
-    }
-
-    fetchPosts()
-  }, [community])
+  const {
+    data: { session }
+  } = await supabase.auth.getSession()
 
   return (
-    <div className='flex flex-col bg-neutral-900 p-2 gap-2'>
-      <div className='gap-12 grid grid-cols-6'>
-        <div className='col-span-6 md:col-span-4'>
-          <ul className='flex flex-col gap-2'>
-            {posts.map((post) => (
-              <PostCard
-                key={post.post_id}
-                postId={post.post_id}
-                title={post.title}
-                image={post.image}
-                user={post.author_name}
-                community={post.community_name}
-                date={post.created_at}
-              />
-            ))}
-          </ul>
-        </div>
-      </div>
+    <div className='bg-neutral-800'>
+      <CommunityPosts session={session} />
     </div>
   )
 }
-
-export default Page

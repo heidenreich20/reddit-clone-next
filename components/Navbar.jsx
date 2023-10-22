@@ -11,37 +11,70 @@ const Navbar = ({ session }) => {
   const [loading, setLoading] = useState(true)
   const [avatarUrl, setAvatarUrl] = useState(null)
   const [avatar, setAvatar] = useState(null)
+  const [subbedCommunities, setSubbedCommunities] = useState(null)
   const [username, setUsername] = useState(null)
+  const [isOpen, setIsOpen] = useState(false)
   const user = session?.user
 
   const getProfile = useCallback(async () => {
-    try {
-      setLoading(true)
+    if (session) {
+      try {
+        setLoading(true)
 
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select('username, avatar_url')
-        .eq('id', user?.id)
-        .single()
+        const { data, error, status } = await supabase
+          .from('profiles')
+          .select('username, avatar_url')
+          .eq('id', user?.id)
+          .single()
 
-      if (error && status !== 406) {
-        throw error
+        if (error && status !== 406) {
+          throw error
+        }
+
+        if (data) {
+          setUsername(data.username)
+          setAvatarUrl(data.avatar_url)
+        }
+      } catch (error) {
+        console.log(error.message)
+      } finally {
+        setLoading(false)
       }
-
-      if (data) {
-        setUsername(data.username)
-        setAvatarUrl(data.avatar_url)
-      }
-    } catch (error) {
-      console.log(error.message)
-    } finally {
-      setLoading(false)
     }
   }, [user, supabase])
 
   useEffect(() => {
     getProfile()
   }, [user, getProfile, supabase])
+
+  const getSubedCommunities = useCallback(async () => {
+    if (session) {
+      try {
+        setLoading(true)
+
+        const { data, error, status } = await supabase
+          .from('subbed_communities')
+          .select()
+          .eq('user_id', user?.id)
+
+        if (error && status !== 406) {
+          throw error
+        }
+
+        if (data) {
+          setSubbedCommunities(data)
+        }
+      } catch (error) {
+        console.log(error?.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+  }, [user, supabase])
+
+  useEffect(() => {
+    getSubedCommunities()
+  }, [user, getSubedCommunities, supabase])
 
   useEffect(() => {
     async function downloadImage (path) {
@@ -61,7 +94,7 @@ const Navbar = ({ session }) => {
   }, [avatarUrl, supabase])
 
   return (
-    <nav className='flex top-0 sticky z-20 w-full items-center md:justify-between justify-between md:gap-24 gap-3 py-2 px-8 bg-neutral-800'>
+    <nav className='flex top-0 sticky z-20 w-full items-center md:justify-between justify-between md:gap-24 gap-3 py-2 px-8 bg-neutral-900'>
       <div className='flex gap-12'>
         <section className='flex items-center gap-4'>
           <div className='rounded-full w-fit p-1.5 bg-purple-500'>
@@ -73,13 +106,27 @@ const Navbar = ({ session }) => {
               <path d='M22 15C22 14.4477 22.4477 14 23 14C23.5523 14 24 14.4477 24 15V17C24 17.5523 23.5523 18 23 18C22.4477 18 22 17.5523 22 17V15Z' fill='inherit' />
             </svg>
           </div>
-          <Link href='/'>
-            <svg className='fill-white md:w-6 w-8 icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
-          </Link>
+          <div className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} bg-neutral-600 relative flex w-56 justify-between items-center`}>
+            <div className='flex justify-between w-full px-3 py-2'>
+              <Link className='' href='/'>
+                <svg className='h-6 fill-white icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
+              </Link>
+              <button onClick={() => { setIsOpen(!isOpen) }} className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} text-white`}>Principal </button>
+              <button onClick={() => { setIsOpen(!isOpen) }} className='text-white font-bold right-0 rotate-90'>&#62;</button>
+            </div>
+            <div className={`${isOpen ? 'block' : 'hidden'} top-[100%] absolute rounded-b-lg border-neutral-500 border-t bg-neutral-600 w-full text-center font-bold text-white`}>
+              {subbedCommunities?.map((sub) => (
+                <div className='flex items-center my-2 gap-2 px-3' key={sub.id}>
+                  <Image alt='community icon' className='w-6 h-6 rounded-full' width={50} height={50} src={sub.community_icon} />
+                  <Link href={`/c/${sub?.community_name}`}>{sub.community_name}</Link>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
 
       </div>
-      {user
+      {user && !loading
         ? (
           <div className='flex text-white items-center gap-2'>
             <Link href={`/users/${username}`}>{username || 'Guest'}</Link>

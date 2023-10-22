@@ -47,6 +47,8 @@ const MainBody = async () => {
                 username={post.author_name}
                 community={post.community_name}
                 date={post.created_at}
+                body={post.body}
+                authorId={post.author_id}
                 voteData={voteData}
               />
             )
@@ -65,6 +67,7 @@ const MainBody = async () => {
                 username={post.author_name}
                 community={post.community_name}
                 date={post.created_at}
+                body={post.body}
               />
             )
           }
