@@ -65,7 +65,7 @@ const Navbar = ({ session }) => {
           setSubbedCommunities(data)
         }
       } catch (error) {
-        console.log(error.message)
+        console.log(error?.message)
       } finally {
         setLoading(false)
       }
@@ -94,7 +94,7 @@ const Navbar = ({ session }) => {
   }, [avatarUrl, supabase])
 
   return (
-    <nav className='flex top-0 sticky z-20 w-full items-center md:justify-between justify-between md:gap-24 gap-3 py-2 px-8 bg-neutral-800'>
+    <nav className='flex top-0 sticky z-20 w-full items-center md:justify-between justify-between md:gap-24 gap-3 py-2 px-8 bg-neutral-900'>
       <div className='flex gap-12'>
         <section className='flex items-center gap-4'>
           <div className='rounded-full w-fit p-1.5 bg-purple-500'>

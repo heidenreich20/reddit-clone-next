@@ -5,13 +5,13 @@ import { useParams } from 'next/navigation'
 import Comment from '@/components/Comment'
 import CommentCMS from '@/components/CommentCMS'
 import Link from 'next/link'
-import Image from 'next/image'
 import useFetchComments from '@/hooks/useFetchComments'
 import useCommentDeletion from '@/hooks/useCommentDeletion'
 import ConfirmPrompt from '@/components/ConfirmPrompt'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import moment from 'moment'
+import ExtraInfo from '@/components/ExtraInfo'
 require('moment/locale/es')
 
 const PostBody = ({ session }) => {
@@ -19,7 +19,6 @@ const PostBody = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
   const [createdAt, setCreatedAt] = useState(null)
-  const noAvatar = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5OuTLrRxelnXyGeD6KieoxUZW7gyffxCr3_La8Qm8&s'
   const supabase = createClientComponentClient()
   const params = useParams()
   const [post, setPost] = useState(null)
@@ -118,6 +117,8 @@ const PostBody = ({ session }) => {
     }
   }
 
+  console.log(params.community)
+
   const timeSince = moment(createdAt, 'YYYYMMDD').fromNow()
   return (
     <section className='bg-neutral-900'>
@@ -126,17 +127,12 @@ const PostBody = ({ session }) => {
         action='Delete'
         onConfirm={handleDelete}
         onClose={closeConfirmPrompt}
-        commentId={commentToDelete}
+        itemId={commentToDelete}
         message='You will permanently delete this comment'
       />
       <div className='flex m-auto md:w-2/3 p-4 gap-6'>
         <div className='gap-12 w-2/3 flex bg-neutral-700 p-2 rounded-lg flex-col'>
           <div className='text-white justify-center flex gap-3 bg-neutral-600 rounded-lg'>
-            {/* <div className='p-2 w-1/4'>
-              {!post?.image
-                ? null // <svg className='w-full stroke-neutral-500 fill-none aspect-video bg-neutral-700 rounded-lg' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg' fill='inherit'><g id='SVGRepo_bgCarrier' stroke-width='0' /><g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round' stroke='inherit' stroke-width='0.192' /><g id='SVGRepo_iconCarrier'> <path stroke='inherit' stroke-linejoin='round' stroke-width='1' d='M6 5a2 2 0 012-2h16a2 2 0 012 2v22a2 2 0 01-2 2H8a2 2 0 01-2-2V5z' /> <path stroke='inherit' stroke-linecap='round' stroke-linejoin='round' stroke-width='1' d='M10 9h4M10 16h12M10 20h12M10 24h4' /> <circle cx='22' cy='9' r='1' fill='inherit' /> </g></svg>
-                : <Image className='hidden object-cover md:flex aspect-video rounded-lg' width={220} height={60} src={post?.image || noAvatar} alt='random image' />}
-            </div> */}
             <div className='flex flex-col gap-2 p-5'>
               <div className='flex gap-2'>
                 <p>Creado por</p>
@@ -169,7 +165,7 @@ const PostBody = ({ session }) => {
             </ul>
           </div>
         </div>
-        <div className='bg-pink-200 w-1/3'>hello world</div>
+        <ExtraInfo session={session} params={params.community} supabase={supabase} />
       </div>
     </section>
   )

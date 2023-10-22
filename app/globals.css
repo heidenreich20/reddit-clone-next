@@ -10,3 +10,19 @@
   max-width: 450px;
   margin: auto;
 }
+
+.custom-show {
+  display: flex;
+  transition: all;
+  animation: appear 0.2s ease-in;
+}
+
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100;
+  }
+}
