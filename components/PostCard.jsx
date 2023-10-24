@@ -1,16 +1,18 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import moment from 'moment'
 import Image from 'next/image'
 import Link from 'next/link'
 import ConfirmPrompt from '@/components/ConfirmPrompt'
 import { useRouter } from 'next/navigation'
 import usePostDelection from '@/hooks/usePostDeletion'
-const notFound = 'data:image/jpeg;base64,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'
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import moment from 'moment'
 require('moment/locale/es')
 
 const PostCard = ({ title, image, authorId, session, body, voteData, version, upvotes, downvotes, route, username, community, date, postId }) => {
+  const notFound = 'data:image/jpeg;base64,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'
   const [votes, setVotes] = useState(upvotes - downvotes)
   const [postToDelete, setPostToDelete] = useState(null)
   const [isOpen, setIsOpen] = useState(false)
@@ -18,10 +20,12 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
   const [isUpvoted, setIsUpvoted] = useState(false)
   const [isDownvoted, setIsDownvoted] = useState(false)
   const [thumbnail, setThumbnail] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [commentCount, setCommentCount] = useState(false)
   const supabase = createClientComponentClient()
   const timeSince = moment(date, 'YYYYMMDD').fromNow()
   const router = useRouter()
+
   const { deletePost } = usePostDelection(supabase)
 
   const openConfirmPrompt = (postId) => {
@@ -246,7 +250,6 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
       console.log(error)
     }
   }
-
   return (
     <div className='border p-2 border-neutral-600 bg-neutral-900 rounded-lg flex-col md:flex-row'>
       <ConfirmPrompt
@@ -257,17 +260,17 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
         itemId={postToDelete}
         message='You will permanently delete this comment'
       />
-      <div className='grid grid-cols-8 gap-6'>
+      <div className='grid grid-cols-8 gap-6 justify-items-end mx-2'>
         <div className='hidden xl:flex gap-2 col-span-3 xl:col-span-2 items-center'>
           <div className='md:flex flex-col'>
             <button onClick={() => { handleUpvote() }}>
-              <svg className={`${isUpvoted ? 'stroke-purple-600 fill-purple-500' : 'stroke-neutral-400 hover:stroke-purple-600 '} fill-white w-8 hover:bg-purple-600/[0.1] rounded-lg cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/sv'>
+              <svg className={`${isUpvoted ? 'stroke-purple-600 fill-purple-500' : 'stroke-neutral-400 hover:stroke-purple-600'} hover:fill-purple-500  w-8 hover:bg-purple-600/[0.1] rounded-lg cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/sv'>
                 <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='inherit' />
               </svg>
             </button>
             <p className='flex text-sm cursor-default justify-center text-neutral-100'>{votes}</p>
             <button onClick={() => { handleDownvote() }}>
-              <svg className={`${isDownvoted ? 'stroke-red-500 fill-red-500' : 'stroke-neutral-400 hover:stroke-red-500 '} fill-white w-8 hover:bg-red-500/[0.1] rounded-lg rotate-180 cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+              <svg className={`${isDownvoted ? 'stroke-red-500 fill-red-500' : 'stroke-neutral-400 hover:stroke-red-500'} hover:fill-red-500  w-8 hover:bg-red-500/[0.1] rounded-lg rotate-180 cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
                 <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='inherit' />
               </svg>
             </button>
@@ -297,24 +300,30 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
           </div>
         </div>
         {session?.user?.id === authorId
-          ? (<div className='flex h-fit relative justify-end'>
-            <button onClick={() => setIsDropOpen(!isDropOpen)} className='font-bold text-neutral-400 mr-3 tracking-widest'>...</button>
+          ? (<div className='flex h-fit w-fit relative col-start-8'>
+            <button onClick={() => setIsDropOpen(!isDropOpen)} className='font-bold text-neutral-400 tracking-widest'>...</button>
             <div className={`absolute top-[100%] ${isDropOpen ? 'custom-show' : 'hidden'} transition-opacity duration-500 ease-linear`}>
               <button onClick={() => { openConfirmPrompt(postId) }} className='bg-neutral-700 px-2 py-1'>delete</button>
             </div>
-            </div>)
+          </div>)
           : null}
       </div>
-      <div className='flex xl:hidden col-span-6 flex-col gap-2'>
-        <Image className='mt-5 aspect-video object-cover rounded-lg' width={500} height={380} src={image || notFound} alt='random image' />
-        <div className='flex items-center text-neutral-400 font-impact font-semibold gap-3 xl:hidden'>
+      <div className='flex xl:hidden overflow-hidden col-span-6 flex-col gap-2'>
+        {image
+          ? (<Image className={`mt-5 ${isExpanded ? 'h-full' : 'max-h-[200px]'} m-auto aspect-video object-cover rounded-lg`} width={500} height={380} src={image || notFound} alt='random image' />)
+          : (<Markdown className={`markdown ${isExpanded ? 'h-full' : 'max-h-[200px]'} overflow-hidden text-sm`} remarkPlugins={[remarkGfm]}>{body}</Markdown>)}
+        <div className='flex mx-2 items-center text-neutral-400 font-impact font-semibold gap-3 xl:hidden'>
           <div className='flex'>
-            <svg className='stroke-neutral-400 w-8 cursor-pointer' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-              <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
-            </svg>
-            <svg className='stroke-neutral-400 w-8 rotate-180 cursor-pointer' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-              <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='#000000' />
-            </svg>
+            <button onClick={() => { handleUpvote() }}>
+              <svg className={`${isUpvoted ? 'stroke-purple-600 fill-purple-500' : 'stroke-neutral-400 hover:stroke-purple-600'} hover:fill-purple-500  w-8 hover:bg-purple-600/[0.1] rounded-lg cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='inherit' />
+              </svg>
+            </button>
+            <button onClick={() => { handleDownvote() }}>
+              <svg className={`${isDownvoted ? 'stroke-red-500 fill-red-500' : 'stroke-neutral-400 hover:stroke-red-500'} hover:fill-red-500  w-8 hover:bg-red-500/[0.1] rounded-lg rotate-180 cursor-pointer`} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                <path fillRule='evenodd' clipRule='evenodd' d='M12 7C12.2652 7 12.5196 7.10536 12.7071 7.29289L19.7071 14.2929C20.0976 14.6834 20.0976 15.3166 19.7071 15.7071C19.3166 16.0976 18.6834 16.0976 18.2929 15.7071L12 9.41421L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L11.2929 7.29289C11.4804 7.10536 11.7348 7 12 7Z' fill='inherit' />
+              </svg>
+            </button>
           </div>
           <div className='flex gap-2'>
             <svg className='w-4 stroke-neutral-400 fill-neutral-400 stroke-2' xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 50 50'>
@@ -322,6 +331,9 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
             </svg>
             <p className='text-sm block xl:hidden font-impact'>{`comments ${commentCount || 0}`}</p>
           </div>
+          <button className='text-white ml-auto' onClick={() => setIsExpanded(!isExpanded)}>
+            <svg className='h-4 stroke-neutral-400' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' stroke='#ffffff'><g id='SVGRepo_bgCarrier' strokeWidth='0' /><g id='SVGRepo_tracerCarrier' strokeLinecap='round' strokeLinejoin='round' stroke='inherit' strokeWidth='0.048' /><g id='SVGRepo_iconCarrier'> <path d='M14 10L21 3M21 3H16.5M21 3V7.5M10 14L3 21M3 21H7.5M3 21L3 16.5' stroke='inherit' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' /></g></svg>
+          </button>
         </div>
       </div>
     </div>

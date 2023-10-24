@@ -117,11 +117,9 @@ const PostBody = ({ session }) => {
     }
   }
 
-  console.log(params.community)
-
   const timeSince = moment(createdAt, 'YYYYMMDD').fromNow()
   return (
-    <section className='bg-neutral-900'>
+    <section className='bg-neutral-800'>
       <ConfirmPrompt
         isOpen={isOpen}
         action='Delete'
@@ -133,7 +131,7 @@ const PostBody = ({ session }) => {
       <div className='flex m-auto md:w-2/3 p-4 gap-6'>
         <div className='gap-12 w-2/3 flex bg-neutral-700 p-2 rounded-lg flex-col'>
           <div className='text-white justify-center flex gap-3 bg-neutral-600 rounded-lg'>
-            <div className='flex flex-col gap-2 p-5'>
+            <div className='flex w-full flex-col gap-2 p-5'>
               <div className='flex gap-2'>
                 <p>Creado por</p>
                 <Link href={`/users/${post?.author_name}`}>{post?.author_name}</Link>
