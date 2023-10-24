@@ -1,14 +1,17 @@
 import Dashboard from '@/components/Dashboard'
 import MainBody from '@/components/MainBody'
+import Feed from '@/components/Feed'
 
 export default async function Home () {
   return (
-    <main className='flex flex-col bg-neutral-900 p-2 gap-2'>
-      <section className='gap-4 grid grid-cols-6'>
+    <main className='flex justify-center flex-col bg-neutral-800 p-6 gap-2'>
+      <div className='flex flex-col gap-6 m-auto'>
         <Dashboard />
-        <MainBody />
-        <div className='bg-red-200'>hello world</div>
-      </section>
+        <section className='gap-6 flex'>
+          <MainBody />
+          <Feed />
+        </section>
+      </div>
     </main>
   )
 }

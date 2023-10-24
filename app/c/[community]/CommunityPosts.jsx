@@ -4,10 +4,11 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useParams } from 'next/navigation'
 import PostCard from '@/components/PostCard'
 import ExtraInfo from '@/components/ExtraInfo'
-import Image from 'next/image'
+import CommunityIcon from '@/components/CommunityIcon'
+import CommunityBanner from '@/components/CommunityBanner'
+import CommunityDashboard from '@/components/CommunityDashboard'
 
 const CommunityPosts = ({ session }) => {
-  const noImage = 'https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg'
   const supabase = createClientComponentClient()
   const { community } = useParams()
   const [communityData, setCommunityData] = useState()
@@ -52,32 +53,58 @@ const CommunityPosts = ({ session }) => {
     fetchCommunity()
   }, [community])
 
+  // useEffect(() => {
+  //   async function downloadImage (path) {
+  //     try {
+  //       const { data, error } = await supabase.storage.from('community_icons').download(path)
+  //       if (error) {
+  //         throw error
+  //       }
+  //       const url = URL.createObjectURL(data)
+  //       setCommunityBanner(url)
+  //     } catch (error) {
+  //       console.log('Error downloading image: ', error)
+  //     }
+  //   }
+
+  //   if (communityBannerUrl) downloadImage(communityBannerUrl)
+  // }, [communityBannerUrl, supabase])
+
   return (
-    <div className='flex flex-col gap-6'>
-      <div className='relative w-full h-56'>
-        <Image className='w-full absolute object-cover' alt='community banner' fill src='https://media.istockphoto.com/id/1369150014/vector/breaking-news-with-world-map-background-vector.jpg?s=612x612&w=0&k=20&c=9pR2-nDBhb7cOvvZU_VdgkMmPJXrBQ4rB1AkTXxRIKM=' />
-      </div>
-      <div className='flex pl-6 gap-3 items-center'>
-        <Image className='rounded-full aspect-square' alt='community icon' width={56} height={56} src={communityData?.community_icon || noImage} />
-        <h1 className='text-3xl font-semibold text-white'>{`${communityData?.community_name} - ${communityData?.subtitle}`}</h1>
-      </div>
-      <div className='flex gap-6 px-6'>
-        <ul className='flex flex-col gap-2'>
-          {posts.map((post) => (
-            <PostCard
-              key={post.post_id}
-              postId={post.post_id}
-              title={post.title}
-              image={post.image}
-              username={post.author_name}
-              community={post.community_name}
-              date={post.created_at}
-              upvotes={post.upvotes}
-              downvotes={post.downvotes}
-              session={session}
-            />
-          ))}
-        </ul>
+    <div className='flex flex-col gap-2 pb-5'>
+      {communityData
+        ? (
+          <>
+            <CommunityBanner supabase={supabase} banner={`${communityData?.community_name}/${communityData?.community_banner}`} />
+            <CommunityIcon supabase={supabase} title={communityData?.community_name} subtitle={communityData?.subtitle} url={`${communityData?.community_name}/${communityData?.community_icon}`} />
+          </>
+          )
+        : (<h2>Cargando...</h2>)}
+      <CommunityDashboard communityToPost={community} />
+      <div className='flex justify-between gap-6 px-6'>
+        {posts.length > 0
+          ? (
+            <ul className='flex flex-col gap-2'>
+              {posts.map((post) => (
+                <PostCard
+                  key={post.post_id}
+                  postId={post.post_id}
+                  title={post.title}
+                  image={post.image}
+                  body={post.body}
+                  route={`/c/${post.community_name}/${post.post_id}`}
+                  username={post.author_name}
+                  community={post.community_name}
+                  date={post.created_at}
+                  upvotes={post.upvotes}
+                  downvotes={post.downvotes}
+                  authorId={post.author_id}
+                  session={session}
+                />
+              ))}
+            </ul>
+            )
+          : (<div className='flex justify-center items-center w-full text-white bg-neutral-900 rounded-lg border border-neutral-600'>No posts found</div>)}
         <ExtraInfo session={session} params={community} supabase={supabase} />
       </div>
     </div>

@@ -90,9 +90,9 @@ const ExtraInfo = ({ supabase, session, params }) => {
   }
 
   return (
-    <div className='bg-neutral-900 flex flex-col gap-3 text-white w-1/3 p-2 rounded-lg border border-neutral-600 h-full'>
+    <div className='bg-neutral-900 hidden lg:flex flex-col gap-3 text-white w-1/3 p-5 rounded-lg border border-neutral-600 h-full'>
       <strong className='text-xs text-neutral-500'>About this community</strong>
-      <div className='flex justify-between'>
+      <div className='flex xl:flex-row flex-col justify-between'>
         <h2>{community?.community_name}</h2>
         <p>{`We are ${subCount} ${community.sub_title}`}</p>
       </div>

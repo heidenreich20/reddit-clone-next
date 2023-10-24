@@ -2,12 +2,14 @@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import CommentCMS from '@/components/CommentCMS'
 import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const SubmitForm = ({ profile }) => {
   const { push } = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClientComponentClient()
   const [newComment, setNewComment] = useState(null)
+  const postTo = searchParams.get('postTo')
   const [newTitle, setNewTitle] = useState('')
 
   const handleTitleChange = (e) => {
@@ -26,7 +28,7 @@ const SubmitForm = ({ profile }) => {
           {
             body: value,
             author_name: profile.username,
-            community_name: 'News',
+            community_name: postTo,
             author_id: profile.id,
             title: newTitle
           }
@@ -43,7 +45,6 @@ const SubmitForm = ({ profile }) => {
   return (
     <div className='bg-neutral-900 flex flex-col justify-center items-center pt-5'>
       <div className='w-1/3 flex flex-col gap-3'>
-        <p>{profile.username}</p>
         <p className='text-white'>{newTitle}</p>
         <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleTitleChange} type='text' placeholder='Title...' />
         <CommentCMS

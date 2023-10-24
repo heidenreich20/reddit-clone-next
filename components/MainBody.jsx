@@ -26,7 +26,7 @@ const MainBody = async () => {
   }, {})
 
   return (
-    <div className='col-span-6 md:col-span-3 md:col-start-2'>
+    <div className='lg:w-2/3'>
       <ul className='flex flex-col gap-2'>
         {posts?.map((post) => {
           // Check if there is a corresponding vote for the post.
@@ -68,6 +68,7 @@ const MainBody = async () => {
                 community={post.community_name}
                 date={post.created_at}
                 body={post.body}
+                authorId={post.author_id}
               />
             )
           }

@@ -26,7 +26,6 @@ export default function AccountForm ({ session }) {
         .select('id, full_name, username, website, avatar_url, created_at, voted_posts')
         .eq('username', params.profile)
         .single()
-      console.log(data)
       if (error && status !== 406) {
         throw error
       }
