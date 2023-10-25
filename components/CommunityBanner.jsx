@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
 const CommunityBanner = ({ banner, supabase }) => {
-  const noImage = 'https://media.istockphoto.com/id/1369150014/vector/breaking-news-with-world-map-background-vector.jpg?s=612x612&w=0&k=20&c=9pR2-nDBhb7cOvvZU_VdgkMmPJXrBQ4rB1AkTXxRIKM='
   const [communityBanner, setCommunityBanner] = useState()
   useEffect(() => {
     async function downloadImage (path) {
@@ -23,7 +22,9 @@ const CommunityBanner = ({ banner, supabase }) => {
 
   return (
     <div className='relative w-full h-64'>
-      <Image className='w-full absolute object-cover aspect-video' alt='community banner' fill src={communityBanner || noImage} />
+      {communityBanner
+        ? (<Image className='w-full absolute object-cover aspect-video' alt='community banner' fill src={communityBanner} />)
+        : null}
     </div>
   )
 }

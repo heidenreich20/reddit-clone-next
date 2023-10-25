@@ -79,12 +79,12 @@ const CommunityPosts = ({ session }) => {
             <CommunityIcon supabase={supabase} title={communityData?.community_name} subtitle={communityData?.subtitle} url={`${communityData?.community_name}/${communityData?.community_icon}`} />
           </>
           )
-        : (<h2>Cargando...</h2>)}
+        : (<div className='w-full h-56 bg-neutral-700 animate-pulse' />)}
       <CommunityDashboard communityToPost={community} />
       <div className='flex justify-between gap-6 px-6'>
         {posts.length > 0
           ? (
-            <ul className='flex flex-col gap-2'>
+            <ul className='flex w-full flex-col gap-2'>
               {posts.map((post) => (
                 <PostCard
                   key={post.post_id}

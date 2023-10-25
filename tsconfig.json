@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/NavbarAvatar.jsx", "app/login/page.jsx", "app/layout.jsx", "hooks/useFetchComments.jsx", "app/api/route.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/NavbarAvatar.jsx", "app/login/page.jsx", "app/layout.jsx", "hooks/useFetchComments.jsx", "app/api/route.js", "app/auth/sign-up/route.js", "app/auth/sign-out/route.js", "app/auth/sign-in/route.js"],
   "exclude": ["node_modules"]
 }
