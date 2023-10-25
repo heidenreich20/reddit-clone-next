@@ -152,7 +152,7 @@ const Navbar = ({ session }) => {
             <LogoutButton />
           </div>
           )
-        : (<Link aria-label='Login' href='/login' className='py-2 px-3 bg-purple-500 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'>Login</Link>
+        : (<Link aria-label='Login' href='/login' className='py-2 px-3 bg-purple-700 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'>Login</Link>
           )}
     </nav>
   )
