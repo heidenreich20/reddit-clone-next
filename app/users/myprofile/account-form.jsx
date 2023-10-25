@@ -149,6 +149,7 @@ export default function AccountForm ({ session, posts }) {
             <div>
               <div className='flex items-center gap-3'>
                 <button
+                  aria-label='Update profile'
                   className='bg-neutral-300/[0.5] p-2 rounded-lg font-semibold text-neutral-700'
                   onClick={() => updateProfile({ fullname, username, website, avatarUrl })}
                   disabled={loading}
@@ -156,7 +157,7 @@ export default function AccountForm ({ session, posts }) {
                   {loading ? 'Loading ...' : 'Update'}
                 </button>
                 <form action='/auth/signout' method='post'>
-                  <button className='bg-red-500 p-2 rounded-lg font-semibold text-neutral-100' type='submit'>
+                  <button aria-label='Sign out' className='bg-red-500 p-2 rounded-lg font-semibold text-neutral-100' type='submit'>
                     Sign out
                   </button>
                 </form>

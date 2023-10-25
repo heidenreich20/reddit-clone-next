@@ -17,7 +17,7 @@ const Comment = ({ avatarUrl, username, body, createdAt, deleteComment, authorId
         <Markdown className='markdown text-sm' remarkPlugins={[remarkGfm]}>{body}</Markdown>
       </div>
       {reqId === authorId && (
-        <button onClick={deleteComment} className='text-xs p-2 flex text-neutral-400 font-bold'>
+        <button aria-label='Delete comment' onClick={deleteComment} className='text-xs p-2 flex text-neutral-400 font-bold'>
           Delete
         </button>
       )}

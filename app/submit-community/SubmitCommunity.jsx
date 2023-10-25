@@ -82,7 +82,7 @@ const SubmitForm = ({ profile }) => {
         <input required className='bg-neutral-800 p-2 rounded text-white' onChange={handleTitleChange} type='text' placeholder='Title...' />
         <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleSubTitleChange} type='text' placeholder='Members title...' />
         <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleFileChange} type='file' placeholder='Title...' />
-        <button disabled={uploading} type='submit'>Submit</button>
+        <button aria-label='Submit community' disabled={uploading} type='submit'>Submit</button>
       </form>
     </div>
   )

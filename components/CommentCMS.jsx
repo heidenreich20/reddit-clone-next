@@ -104,7 +104,7 @@ const CommentCMS = ({ newComment, onCommentChange, onSubmitComment }) => {
           }
         }}
       />
-      <button className='p-1 w-fit font-semibold text-sm rounded-full bg-neutral-300' onClick={() => { onSubmitComment(value) }}>
+      <button aria-label='Publish comment' className='p-1 w-fit font-semibold text-sm rounded-full bg-neutral-300' onClick={() => { onSubmitComment(value) }}>
         Publish
       </button>
     </div>

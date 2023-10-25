@@ -111,7 +111,7 @@ const Navbar = ({ session }) => {
           </div>
           <div className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} bg-neutral-800 relative flex w-56 justify-between items-center`}>
             <div className='flex justify-between gap-3 w-full px-3 py-2'>
-              <Link className='' href='/'>
+              <Link aria-label='Go to main page' className='' href='/'>
                 <svg className='h-6 fill-neutral-100 icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
               </Link>
               <button aria-label='Open communities' onClick={handleOpen} className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} flex w-full items-center justify-between text-white`}>
@@ -147,12 +147,12 @@ const Navbar = ({ session }) => {
       {user && !loading
         ? (
           <div className='flex text-white items-center gap-2'>
-            <Link href={`/users/${username}`}>{username || 'Guest'}</Link>
+            <Link aria-label='Go to your profile' href={`/users/${username}`}>{username || 'Guest'}</Link>
             <Image alt='avatar' className='object-cover aspect-square rounded-full' width={36} height={36} src={avatar || noImage} />
             <LogoutButton />
           </div>
           )
-        : (<Link href='/login' className='py-2 px-3 bg-purple-500 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'>Login</Link>
+        : (<Link aria-label='Login' href='/login' className='py-2 px-3 bg-purple-500 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'>Login</Link>
           )}
     </nav>
   )
