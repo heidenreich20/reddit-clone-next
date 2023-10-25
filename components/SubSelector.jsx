@@ -6,7 +6,6 @@ import Link from 'next/link'
 const SubSelector = ({ name, url, supabase, isFavorite, user, communityId }) => {
   const [isFavoriteSub, setIsFavoriteSub] = useState(isFavorite)
   const [isUpdating, setIsUpdating] = useState(false)
-  const noImage = 'https://media.istockphoto.com/id/1369150014/vector/breaking-news-with-world-map-background-vector.jpg?s=612x612&w=0&k=20&c=9pR2-nDBhb7cOvvZU_VdgkMmPJXrBQ4rB1AkTXxRIKM='
   const [communityIcon, setCommunityIcon] = useState()
 
   useEffect(() => {
@@ -48,7 +47,9 @@ const SubSelector = ({ name, url, supabase, isFavorite, user, communityId }) => 
   return (
     <div className='flex items-center justify-between my-2 gap-2 px-3'>
       <div className='flex gap-2'>
-        <Image alt='community icon' className='w-6 h-6 rounded-full' width={50} height={50} src={communityIcon || noImage} />
+        {communityIcon
+          ? (<Image alt='community icon' className='w-6 h-6 rounded-full' width={50} height={50} src={communityIcon} />)
+          : null}
         <Link href={`/c/${name}`}>{name}</Link>
       </div>
       <button disabled={isUpdating} onClick={() => { addFavorite() }}>

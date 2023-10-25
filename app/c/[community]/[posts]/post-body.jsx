@@ -139,6 +139,7 @@ const PostBody = ({ session }) => {
               </div>
               <h2 className='font-bold text-xl'>{post?.title}</h2>
               <Markdown className='markdown text-sm' remarkPlugins={[remarkGfm]}>{post?.body}</Markdown>
+              {post?.image ? <img src={post?.image} alt='' /> : null}
             </div>
           </div>
           <div className=''>
