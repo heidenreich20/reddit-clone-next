@@ -36,35 +36,6 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
     setIsOpen(false)
   }
 
-  // const optimisticLocking = async () => {
-  //   const currentVersion = version
-  //   const increaseUpvote = upvotes + 1
-  //   const decreaseDownvote = downvotes - 1
-
-  //   const newVersion = Date.now()
-
-  //   // 4. Attempt to upvote the item
-  //   const { error: updateError } = await supabase
-  //     .from('posts')
-  //     .update({
-  //       downvotes: decreaseDownvote,
-  //       upvotes: increaseUpvote,
-  //       version: newVersion
-  //     })
-  //     .eq('post_id', postId)
-
-  //   // 5. Handle conflicts
-  //   const { versionCheck } = await supabase
-  //     .from('posts')
-  //     .select('version')
-  //     .eq('post_id', postId)
-  //   if (versionCheck !== currentVersion) {
-  //     optimisticLocking()
-  //   } else {
-  //     console.error('Error upvoting the item:', updateError)
-  //   }
-  // }
-
   useEffect(() => {
     const getThumbnail = () => {
       const imageUrlRegex = /!\[image\]\((.*?)\)/
@@ -170,7 +141,7 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
       }
     } else {
       // eslint-disable-next-line no-undef
-      alert('You must be logged in to vote')
+      router.push('/login?message=Must be logged in to vote')
     }
   }
 

@@ -75,7 +75,7 @@ const ExtraInfo = ({ supabase, session, params }) => {
       setIsSubbed(true)
       setSubCount(subCount + 1)
     } else {
-      push('/login')
+      push('/login?message=Must be logged in to join')
     }
   }
 
