@@ -251,7 +251,7 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
     }
   }
   return (
-    <div className='border p-2 border-neutral-600 bg-neutral-900 rounded-lg flex-col md:flex-row'>
+    <li className='border p-2 border-neutral-600 bg-neutral-900 rounded-lg flex-col md:flex-row'>
       <ConfirmPrompt
         isOpen={isOpen}
         action='Delete'
@@ -351,7 +351,7 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
           </button>
         </div>
       </div>
-    </div>
+    </li>
   )
 }
 
