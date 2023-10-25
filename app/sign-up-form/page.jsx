@@ -1,91 +1,91 @@
 import Link from 'next/link'
 import Messages from './messages'
 
-export default async function Login() {
+export default async function Login () {
   return (
-    <div className="flex-1 m-auto flex mt-10 flex-col w-full px-8 sm:max-w-md justify-center gap-2">
+    <div className='flex-1 m-auto flex mt-10 flex-col w-full px-8 sm:max-w-md justify-center gap-2'>
       <Link
-        href="/"
-        className="w-fit left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
+        href='/'
+        className='w-fit left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm'
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
+          xmlns='http://www.w3.org/2000/svg'
+          width='24'
+          height='24'
+          viewBox='0 0 24 24'
+          fill='none'
+          stroke='currentColor'
+          strokeWidth='2'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+          className='mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1'
         >
-          <polyline points="15 18 9 12 15 6" />
+          <polyline points='15 18 9 12 15 6' />
         </svg>{' '}
         Back
       </Link>
 
       <form
-        className="flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-        action="/auth/sign-up"
-        method="post"
+        className='flex-1 flex flex-col w-full justify-center gap-2 text-foreground'
+        action='/auth/sign-up'
+        method='post'
       >
-        <label className="text-md" htmlFor="email">
+        <label className='text-md' htmlFor='email'>
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          name="email"
-          placeholder="you@example.com"
+          className='rounded-md px-4 py-2 bg-inherit border mb-6'
+          name='email'
+          placeholder='you@example.com'
           required
         />
-        <label className="text-md" htmlFor="password">
+        <label className='text-md' htmlFor='password'>
           Password
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          type="password"
-          name="password"
-          placeholder="••••••••"
+          className='rounded-md px-4 py-2 bg-inherit border mb-6'
+          type='password'
+          name='password'
+          placeholder='••••••••'
           required
         />
-        <label className="text-md" htmlFor="confirm-password">
+        <label className='text-md' htmlFor='confirm-password'>
           Confirm password
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          type="password"
-          name="confirm-password"
-          placeholder="••••••••"
+          className='rounded-md px-4 py-2 bg-inherit border mb-6'
+          type='password'
+          name='confirm-password'
+          placeholder='••••••••'
           required
         />
-        <label className="text-md" htmlFor="username">
+        <label className='text-md' htmlFor='username'>
           Username
         </label>
-       <input
-          className="rounded-md w-full px-4 py-2 bg-inherit border mb-6"
-          type="text"
+        <input
+          className='rounded-md w-full px-4 py-2 bg-inherit border mb-6'
+          type='text'
           name='username'
-          placeholder="Enter your username"
-          // value={userData.username}
-          // onChange={handleChange}
+          placeholder='Enter your username'
+        // value={userData.username}
+        // onChange={handleChange}
         />
-        <label className="text-md" htmlFor="profile">
+        <label className='text-md' htmlFor='profile'>
           Profile picture
         </label>
         <input
-          className="rounded-md w-full px-4 py-2 bg-inherit border mb-6"
-          type="text"
+          className='rounded-md w-full px-4 py-2 bg-inherit border mb-6'
+          type='text'
           name='profile'
-          placeholder="Enter your profile pic link"
+          placeholder='Enter your profile pic link'
           required
-          // value={userData.profile}
-          // onChange={handleChange}
+        // value={userData.profile}
+        // onChange={handleChange}
         />
-         <button className="bg-neutral-500 rounded px-4 py-2 text-white mb-2">
+        <button className='bg-neutral-500 rounded px-4 py-2 text-white mb-2'>
           Sign Up
         </button>
-         <Link className='text-sm text-blue-700' href='login'>Already have an account</Link>
+        <Link className='text-sm text-blue-700' href='login'>Already have an account</Link>
         <Messages />
       </form>
     </div>

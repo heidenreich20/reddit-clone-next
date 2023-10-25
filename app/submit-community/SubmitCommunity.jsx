@@ -52,13 +52,16 @@ const SubmitForm = ({ profile }) => {
       const fileExt = file.name.split('.').pop()
       const filePath = `${Math.random()}.${fileExt}`
       console.log(`News/${filePath}`)
-      const { data, error } = await supabase
+      const { error } = await supabase
         .storage
         .from('community_icons')
         .upload(`${communityTitle}/${filePath}`, newFile, {
           cacheControl: '3600',
           upsert: false
         })
+      if (error) {
+        console.log(error)
+      }
       createCommunity(filePath)
     } catch (error) {
       console.log(error)

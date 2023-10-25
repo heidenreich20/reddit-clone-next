@@ -300,12 +300,13 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
           </div>
         </div>
         {session?.user?.id === authorId
-          ? (<div className='flex h-fit w-fit relative col-start-8'>
-            <button onClick={() => setIsDropOpen(!isDropOpen)} className='font-bold text-neutral-400 tracking-widest'>...</button>
-            <div className={`absolute top-[100%] ${isDropOpen ? 'custom-show' : 'hidden'} transition-opacity duration-500 ease-linear`}>
-              <button onClick={() => { openConfirmPrompt(postId) }} className='bg-neutral-700 px-2 py-1'>delete</button>
-            </div>
-          </div>)
+          ? (
+            <div className='flex h-fit w-fit relative col-start-8'>
+              <button onClick={() => setIsDropOpen(!isDropOpen)} className='font-bold text-neutral-400 tracking-widest'>...</button>
+              <div className={`absolute top-[100%] ${isDropOpen ? 'custom-show' : 'hidden'} transition-opacity duration-500 ease-linear`}>
+                <button onClick={() => { openConfirmPrompt(postId) }} className='bg-neutral-700 px-2 py-1'>delete</button>
+              </div>
+            </div>)
           : null}
       </div>
       <div className='flex xl:hidden overflow-hidden col-span-6 flex-col gap-2'>
