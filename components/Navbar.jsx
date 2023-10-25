@@ -114,8 +114,8 @@ const Navbar = ({ session }) => {
               <Link aria-label='Go to main page' className='' href='/'>
                 <svg className='h-6 fill-neutral-100 icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
               </Link>
-              <button aria-label='Open communities' onClick={handleOpen} className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} flex w-full items-center justify-between text-white`}>
-                <p className='font-semibold text-neutral-100'>Home</p>
+              <button aria-label='Open menu' onClick={handleOpen} className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} flex w-full items-center justify-between text-white`}>
+                <p className='font-semibold text-neutral-100'>Menu</p>
                 <svg className='w-6 stroke-neutral-100 fill-neutral-100' viewBox='0 0 24 24' fill='inherit' xmlns='http://www.w3.org/2000/svg'><g id='SVGRepo_bgCarrier' strokeWidth='0' /><g id='SVGRepo_tracerCarrier' strokeLinecap='round' strokeLinejoin='round' /><g id='SVGRepo_iconCarrier'> <path fillRule='evenodd' clipRule='evenodd' d='M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z' fill='inherit' /> </g></svg>
               </button>
             </div>
