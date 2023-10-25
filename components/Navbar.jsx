@@ -17,6 +17,19 @@ const Navbar = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false)
   const user = session?.user
 
+  const handleOpen = () => {
+    if (isOpen) {
+      setIsOpen(false)
+    }
+    if (!isOpen && subbedCommunities === null) {
+      setIsOpen(true)
+      getSubedCommunities()
+    }
+    if (!isOpen && subbedCommunities?.length > 0) {
+      setIsOpen(true)
+    }
+  }
+
   const getProfile = useCallback(async () => {
     if (session) {
       try {
@@ -48,7 +61,7 @@ const Navbar = ({ session }) => {
     getProfile()
   }, [user, getProfile, supabase])
 
-  const getSubedCommunities = useCallback(async () => {
+  const getSubedCommunities = async () => {
     if (session) {
       try {
         setLoading(true)
@@ -70,11 +83,7 @@ const Navbar = ({ session }) => {
         setLoading(false)
       }
     }
-  }, [user, supabase])
-
-  useEffect(() => {
-    getSubedCommunities()
-  }, [user, getSubedCommunities, supabase])
+  }
 
   useEffect(() => {
     async function downloadImage (path) {
@@ -111,12 +120,28 @@ const Navbar = ({ session }) => {
               <Link className='' href='/'>
                 <svg className='h-6 fill-white icon flat-color' fill='inherit' viewBox='0 0 24 24' id='home-alt-3' data-name='Flat Color' xmlns='http://www.w3.org/2000/svg'><path id='primary' d='M21.71,11.29l-9-9a1,1,0,0,0-1.42,0l-9,9a1,1,0,0,0-.21,1.09A1,1,0,0,0,3,13H4v7.3A1.77,1.77,0,0,0,5.83,22H8.5a1,1,0,0,0,1-1V16.1a1,1,0,0,1,1-1h3a1,1,0,0,1,1,1V21a1,1,0,0,0,1,1h2.67A1.77,1.77,0,0,0,20,20.3V13h1a1,1,0,0,0,.92-.62A1,1,0,0,0,21.71,11.29Z' /></svg>
               </Link>
-              <button onClick={() => { setIsOpen(!isOpen) }} className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} text-white`}>Principal </button>
-              <button onClick={() => { setIsOpen(!isOpen) }} className='text-white font-bold right-0 rotate-90'>&#62;</button>
+              <button onClick={handleOpen} className={`${isOpen ? 'rounded-t-lg' : 'rounded-lg'} text-white`}>Principal </button>
+              <button onClick={handleOpen} className='text-white font-bold right-0 rotate-90'>&#62;</button>
             </div>
-            <div className={`${isOpen ? 'block' : 'hidden'} top-[100%] absolute rounded-b-lg border-neutral-500 border-t bg-neutral-800 w-full text-center font-bold text-white`}>
+            <div className={`${isOpen ? 'block' : 'hidden'} top-[100%] absolute rounded-b-lg border-neutral-500 border-t bg-neutral-800 w-full font-bold text-white`}>
+              <div className='border-b border-neutral-500'>
+                <p className='pl-3'>Favorites</p>
+                {subbedCommunities
+                  ?.filter((sub) => sub.is_favorite) // Filter only the elements with is_favorite true
+                  .map((sub) => (
+                    <SubSelector
+                      key={sub.community_id}
+                      isFavorite={sub.is_favorite}
+                      supabase={supabase}
+                      name={sub.community_name}
+                      url={`${sub.community_name}/${sub.community_icon}`}
+                      communityId={sub.community_id}
+                      user={user}
+                    />
+                  ))}
+              </div>
               {subbedCommunities?.map((sub) => (
-                <SubSelector key={sub.community_id} supabase={supabase} name={sub.community_name} url={`${sub.community_name}/${sub.community_icon}`} />
+                <SubSelector key={sub.community_id} communityId={sub.community_id} user={user} isFavorite={sub.is_favorite} supabase={supabase} name={sub.community_name} url={`${sub.community_name}/${sub.community_icon}`} />
               ))}
             </div>
           </div>
