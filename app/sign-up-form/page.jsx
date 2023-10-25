@@ -70,18 +70,6 @@ export default async function Login () {
         // value={userData.username}
         // onChange={handleChange}
         />
-        <label className='text-md' htmlFor='profile'>
-          Profile picture
-        </label>
-        <input
-          className='rounded-md w-full px-4 py-2 bg-inherit border mb-6'
-          type='text'
-          name='profile'
-          placeholder='Enter your profile pic link'
-          required
-        // value={userData.profile}
-        // onChange={handleChange}
-        />
         <button className='bg-neutral-500 rounded px-4 py-2 text-white mb-2'>
           Sign Up
         </button>

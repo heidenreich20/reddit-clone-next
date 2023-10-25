@@ -57,21 +57,23 @@ const PostBody = ({ session }) => {
   }, [supabase])
 
   const getProfile = useCallback(async () => {
-    try {
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select('id, full_name, username, website, avatar_url, created_at')
-        .eq('id', user?.id)
-        .single()
-      if (error && status !== 406) {
-        throw error
+    if (user) {
+      try {
+        const { data, error, status } = await supabase
+          .from('profiles')
+          .select('id, full_name, username, website, avatar_url, created_at')
+          .eq('id', user?.id)
+          .single()
+        if (error && status !== 406) {
+          throw error
+        }
+        if (data) {
+          setUserData(data)
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-undef
+        alert('Error loading user data!')
       }
-      if (data) {
-        setUserData(data)
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-undef
-      alert('Error loading user data!')
     }
   }, [user, supabase])
 

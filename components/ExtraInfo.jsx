@@ -1,32 +1,34 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 const ExtraInfo = ({ supabase, session, params }) => {
+  const { push } = useRouter()
   const [isSubbed, setIsSubbed] = useState(false)
   const [community, setCommunity] = useState(false)
   const [subCount, setSubCount] = useState('loading...')
-  const user = session.user
+  const user = session?.user
 
   const checkSubscription = (subbedCommunities, communityId) => {
     return subbedCommunities.some(sub => sub.community_id === communityId)
   }
 
   const fetchSubs = async (communityId, user, setIsSubbed) => {
-    try {
-      const { data, error } = await supabase
-        .from('subbed_communities')
-        .select()
-        .eq('user_id', user.id)
-        .eq('community_id', communityId)
-
-      if (error) {
-        console.error('Error fetching subbed communities:', error)
-        return
+    if (user) {
+      try {
+        const { data, error } = await supabase
+          .from('subbed_communities')
+          .select()
+          .eq('user_id', user.id)
+          .eq('community_id', communityId)
+        if (error) {
+          console.error('Error fetching subbed communities:', error)
+          return
+        }
+        setIsSubbed((prevIsSubbed) => checkSubscription(data, communityId))
+      } catch (error) {
+        console.error('Unexpected error:', error)
       }
-
-      setIsSubbed((prevIsSubbed) => checkSubscription(data, communityId))
-    } catch (error) {
-      console.error('Unexpected error:', error)
     }
   }
 
@@ -57,7 +59,7 @@ const ExtraInfo = ({ supabase, session, params }) => {
   }, [])
 
   const subCommunity = async () => {
-    if (!isSubbed) {
+    if (!isSubbed && user) {
       const { error: subError } = await supabase
         .from('subbed_communities')
         .upsert({
@@ -72,6 +74,8 @@ const ExtraInfo = ({ supabase, session, params }) => {
       }
       setIsSubbed(true)
       setSubCount(subCount + 1)
+    } else {
+      push('/login')
     }
   }
 
