@@ -48,7 +48,7 @@ const UserInfo = ({ session }) => {
     getProfile()
   }, [user, getProfile])
 
-  async function updateProfile({ username, website, avatarUrl }) {
+  async function updateProfile ({ username, website, avatarUrl }) {
     try {
       setLoading(true)
       const { error } = await supabase.from('profiles').upsert({
@@ -84,7 +84,7 @@ const UserInfo = ({ session }) => {
               updateProfile({ fullname, username, avatarUrl: url })
             }}
           />
-        )}
+          )}
       {loading
         ? <SkeletonLoader />
         : (
@@ -92,7 +92,7 @@ const UserInfo = ({ session }) => {
             <label htmlFor='email'>Email</label>
             <input className='rounded-md p-1 w-2/3' id='email' type='text' value={session?.user.email} disabled />
           </div>
-        )}
+          )}
       {loading
         ? <SkeletonLoader />
         : (
@@ -106,7 +106,7 @@ const UserInfo = ({ session }) => {
               onChange={(e) => setFullname(e.target.value)}
             />
           </div>
-        )}
+          )}
       {loading
         ? <SkeletonLoader />
         : (
@@ -120,7 +120,7 @@ const UserInfo = ({ session }) => {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-        )}
+          )}
       <div>
         <div className='flex items-center gap-3'>
           <button

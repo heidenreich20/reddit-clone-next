@@ -1,9 +1,9 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
-import ShowPosts from './posts/ShowPosts'
-import UserInfo from './UserInfo'
+import UserInfo from '../UserInfo'
+import ShowComments from './ShowComments'
 
-export default async function profile () {
+export default async function myprofile () {
   const cookieStore = cookies()
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
@@ -13,7 +13,7 @@ export default async function profile () {
 
   return (
     <div className='flex justify-between'>
-      <ShowPosts session={session} />
+      <ShowComments session={session} />
       <UserInfo session={session} />
     </div>
   )

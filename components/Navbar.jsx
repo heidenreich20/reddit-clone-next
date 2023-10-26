@@ -87,7 +87,7 @@ const Navbar = ({ session }) => {
   }
 
   useEffect(() => {
-    async function downloadImage(path) {
+    async function downloadImage (path) {
       try {
         const { data, error } = await supabase.storage.from('avatars').download(path)
         if (error) {
