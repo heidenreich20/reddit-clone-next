@@ -131,20 +131,20 @@ const PostBody = ({ session }) => {
         message='You will permanently delete this comment'
       />
       <div className='flex m-auto md:w-2/3 p-4 gap-6'>
-        <div className='gap-12 w-2/3 flex bg-neutral-700 p-2 rounded-lg flex-col'>
-          <div className='text-white justify-center flex gap-3 bg-neutral-600 rounded-lg'>
-            <div className='flex w-full flex-col gap-2 p-5'>
+        <div className='gap-12 w-full md:w-2/3 flex bg-neutral-700 rounded-lg flex-col'>
+          <div className='text-white justify-center flex gap-3 bg-neutral-600 rounded-t-lg'>
+            <div className='flex w-full flex-col gap-2 p-3 sm:p-5'>
               <div className='flex gap-2'>
-                <p>Creado por</p>
-                <Link href={`/users/${post?.author_name}`}>{post?.author_name}</Link>
-                <p>{`${timeSince}`}</p>
+                <p className='sm:text-base text-xs'>Creado por</p>
+                <Link className='sm:text-base text-xs font-bold text-white' href={`/users/${post?.author_name}`}>{post?.author_name}</Link>
+                <p className='sm:text-base text-xs'>{`${timeSince}`}</p>
               </div>
-              <h2 className='font-bold text-xl'>{post?.title}</h2>
-              <Markdown className='markdown text-sm' remarkPlugins={[remarkGfm]}>{post?.body}</Markdown>
-              {post?.image ? <img src={post?.image} alt='' /> : null}
+              <h2 className='font-bold text-lg sm:text-xl'>{post?.title}</h2>
+              <Markdown className='markdown post-image text-sm w-full overflow-hidden' remarkPlugins={[remarkGfm]}>{post?.body}</Markdown>
+              {post?.image ? <img className='w-full' src={post?.image} alt='' /> : null}
             </div>
           </div>
-          <div className=''>
+          <div className='p-5'>
             <CommentCMS
               newComment={newComment}
               onCommentChange={(e) => setNewComment(e.target.value)}
@@ -153,7 +153,7 @@ const PostBody = ({ session }) => {
             <ul className='flex flex-col gap-2'>
               {postComments?.map((comment) => (
                 <Comment
-                  reqId={user.id}
+                  reqId={user?.id}
                   authorId={comment.author_id}
                   deleteComment={() => openConfirmPrompt(comment.id)}
                   username={comment.comment_owner}

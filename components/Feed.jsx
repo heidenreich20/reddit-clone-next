@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Link from 'next/link'
 import moment from 'moment'
-require('moment/locale/es')
 
 const Feed = () => {
   const [feedData, setFeedData] = useState()
@@ -32,7 +31,7 @@ const Feed = () => {
   return (
     <div className='lg:flex border border-neutral-600 p-3 rounded-lg bg-neutral-900 hidden flex-col gap-3 w-1/3'>
       {feedData?.map((feed) => {
-        const timeSince = moment(feed.created_at, 'YYYYMMDD').fromNow()
+        const timeSince = moment(feed.created_at, 'YYYYMMDD').locale('en').fromNow()
         return (
           <div className='flex flex-col gap-2 border border-neutral-800 p-2 rounded-lg' key={feed.post_id}>
             <div className='flex justify-between'>

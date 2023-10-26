@@ -30,3 +30,18 @@ body {
     opacity: 100;
   }
 }
+
+.post-image img {
+  width: 100%;
+}
+
+.linkActive::after {
+  content: '';
+  height: 3px; /* You can adjust the height to your preference */
+  background-color: rebeccapurple;
+  display: block;
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+}

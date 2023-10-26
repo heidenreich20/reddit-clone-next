@@ -26,7 +26,7 @@ const MainBody = async () => {
   }, {})
 
   return (
-    <div className='lg:w-2/3'>
+    <div className='lg:w-2/3 w-full'>
       <ul className='flex flex-col gap-2'>
         {posts?.map((post) => {
           // Check if there is a corresponding vote for the post.
