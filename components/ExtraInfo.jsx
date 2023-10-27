@@ -85,6 +85,7 @@ const ExtraInfo = ({ supabase, session, params }) => {
         .from('subbed_communities')
         .delete()
         .eq('user_id', user.id)
+        .eq('community_id', community.id)
       if (subError) {
         console.log(subError)
       }

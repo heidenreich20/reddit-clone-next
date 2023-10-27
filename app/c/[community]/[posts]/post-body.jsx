@@ -144,12 +144,16 @@ const PostBody = ({ session }) => {
               {post?.image ? <img className='w-full' src={post?.image} alt='' /> : null}
             </div>
           </div>
-          <div className='p-5'>
-            <CommentCMS
-              newComment={newComment}
-              onCommentChange={(e) => setNewComment(e.target.value)}
-              onSubmitComment={createComment}
-            />
+          <div className='flex justify-center p-5'>
+            {session
+              ? (
+                <CommentCMS
+                  newComment={newComment}
+                  onCommentChange={(e) => setNewComment(e.target.value)}
+                  onSubmitComment={createComment}
+                />
+                )
+              : (<Link href='/login' aria-label='You must be logged in to comment' className='text-white font-semibold outline outline-1 m-auto outline-red-600 p-2 rounded-lg w-fit'>You must be logged in to comment</Link>)}
             <ul className='flex flex-col gap-2'>
               {postComments?.map((comment) => (
                 <Comment
