@@ -2,6 +2,7 @@ import React from 'react'
 import SubmitCommunity from './SubmitCommunity'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 const page = async () => {
   const cookieStore = cookies()
@@ -10,6 +11,10 @@ const page = async () => {
   const {
     data: { session }
   } = await supabase.auth.getSession()
+
+  if (!session) {
+    return redirect('/login')
+  }
 
   const { data: profile } = await supabase
     .from('profiles')
