@@ -66,7 +66,6 @@ const CommunityPosts = ({ session }) => {
   //       console.log('Error downloading image: ', error)
   //     }
   //   }
-
   //   if (communityBannerUrl) downloadImage(communityBannerUrl)
   // }, [communityBannerUrl, supabase])
 

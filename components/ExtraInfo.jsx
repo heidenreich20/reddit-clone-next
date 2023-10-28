@@ -1,12 +1,14 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 const ExtraInfo = ({ supabase, session, params }) => {
   const { push } = useRouter()
   const [isSubbed, setIsSubbed] = useState(false)
   const [community, setCommunity] = useState(false)
   const [subCount, setSubCount] = useState('loading...')
+  const pathname = usePathname()
   const user = session?.user
 
   const checkSubscription = (subbedCommunities, communityId) => {
@@ -104,6 +106,7 @@ const ExtraInfo = ({ supabase, session, params }) => {
       {isSubbed
         ? (<button onClick={unsubCommunity} className='bg-neutral-300 p-2 rounded-full font-bold text-xs text-black'>Leave community</button>)
         : (<button onClick={subCommunity} className='bg-neutral-300 p-2 rounded-full font-bold text-xs text-black'>Join community</button>)}
+      {community.owner === user?.id ? (<Link href={`${pathname}/edit-community`} className='bg-purple-700 p-2 rounded-full font-bold text-xs text-white text-center'>Edit community</Link>) : null}
     </div>
   )
 }

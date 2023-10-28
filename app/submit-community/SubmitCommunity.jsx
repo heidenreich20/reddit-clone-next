@@ -18,9 +18,6 @@ const SubmitForm = ({ profile }) => {
   const handleSubTitleChange = (e) => {
     setSubTitle(e.target.value)
   }
-  const handleFileChange = (e) => {
-    setNewFile(e.target.files[0])
-  }
 
   const createCommunity = async (url) => {
     if (url.trim() === '') {
@@ -33,7 +30,7 @@ const SubmitForm = ({ profile }) => {
         .upsert([
           {
             community_name: communityTitle,
-            community_icon: url,
+            community_banner: url,
             sub_title: subTitle
           }
         ])
@@ -51,7 +48,6 @@ const SubmitForm = ({ profile }) => {
       const file = newFile
       const fileExt = file.name.split('.').pop()
       const filePath = `${Math.random()}.${fileExt}`
-      console.log(`News/${filePath}`)
       const { error } = await supabase
         .storage
         .from('community_icons')
@@ -75,13 +71,32 @@ const SubmitForm = ({ profile }) => {
     uploadCommunityIcon(communityTitle)
   }
 
+  const handleDragOver = (event) => {
+    event.preventDefault()
+  }
+
+  const handleDrop = (event) => {
+    event.preventDefault()
+    const imageView = document.querySelector('.imageView')
+    setNewFile(event.dataTransfer.files[0])
+    const imgLink = URL.createObjectURL(event.dataTransfer.files[0])
+    imageView.style.backgroundImage = `url(${imgLink})`
+  }
+
   return (
     <div className='bg-neutral-900 flex flex-col justify-center items-center pt-5'>
       <form onSubmit={handleSubmit} className='w-1/3 flex flex-col gap-3'>
         <p className='text-white'>{communityTitle}</p>
         <input required className='bg-neutral-800 p-2 rounded text-white' onChange={handleTitleChange} type='text' placeholder='Title...' />
         <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleSubTitleChange} type='text' placeholder='Members title...' />
-        <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleFileChange} type='file' placeholder='Title...' />
+        <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleSubTitleChange} type='text' placeholder='Members title...' />
+        <div
+          className='h-56 rounded bg-neutral-800 imageView ext-white'
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          <h1 className='text-white font-bold'>Drag and Drop Files to Upload</h1>
+        </div>
         <button aria-label='Submit community' disabled={uploading} type='submit'>Submit</button>
       </form>
     </div>
