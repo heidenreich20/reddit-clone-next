@@ -1,12 +1,14 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import LogoutButton from './LogoutButton'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import NavMenu from '@/components/NavMenu'
+import { useOnClickOutside } from 'usehooks-ts'
 
 const Navbar = ({ session }) => {
+  const ref = useRef()
   const supabase = createClientComponentClient()
   const noImage = 'https://precisionpharmacy.net/wp-content/themes/apexclinic/images/no-image/No-Image-Found-400x264.png'
   const [loading, setLoading] = useState(true)
@@ -86,6 +88,16 @@ const Navbar = ({ session }) => {
     if (avatarUrl) downloadImage(avatarUrl)
   }, [avatarUrl, supabase])
 
+  const handleClickOutside = () => {
+    setIsProfileOpen(false)
+  }
+
+  const handleClickInside = () => {
+    setIsProfileOpen(!isProfileOpen)
+  }
+
+  useOnClickOutside(ref, handleClickOutside)
+
   return (
     <nav className='flex top-0 sticky z-20 m-auto items-center md:justify-between justify-between md:gap-24 gap-3 py-2 px-4 sm:px-8 bg-neutral-900'>
       <div className='flex gap-12'>
@@ -101,18 +113,19 @@ const Navbar = ({ session }) => {
         ? (
           <div className='flex text-white items-center gap-2'>
             <Link className='sm:block hidden' aria-label='Go to your profile' href={`/users/${username}`}>{username || 'Guest'}</Link>
-            <div onClick={() => setIsProfileOpen(!isProfileOpen)} aria-label='Open profile menu' className='relative'>
+            <div ref={ref} onClick={handleClickInside} aria-label='Open profile menu' className='cursor-pointer relative'>
               <Image alt='avatar' className='object-cover border-2 border-purple-700 w-10 h-10 aspect-square rounded-full' width={36} height={36} src={avatar || noImage} />
-              <ul className={`${isProfileOpen ? 'custom-show' : 'hidden'} flex flex-col gap-2 absolute right-0 bg-neutral-600 p-2 rounded-lg mt-2`}>
-                <li className='break-keep w-24 text-xs'>My profile</li>
-                <li className='break-keep w-24 text-xs outline outline-1 p-1 rounded-md font-semibold text-red-500 outline-red-600'>
-                  <form action='/auth/sign-out' method='post'>
+              <ul ref={ref} className={`${isProfileOpen ? 'custom-show' : 'hidden'} p-2 flex flex-col gap-2 absolute right-0 bg-neutral-600 rounded-lg mt-2`}>
+                <li className='break-keep w-24 text-xs font-semibold p-1 rounded transition-colors ease-linear duration-100 hover:bg-neutral-700/[0.5]'>
+                  <Link href='/users/myprofile'>My profile</Link>
+                </li>
+                <li className='break-keep hover:bg-neutral-700 hover:outline-red-700 hover:text-red-600 transition-colors duration-150 ease-out w-24 text-xs outline outline-1 p-1 rounded-md font-semibold text-red-500 outline-red-600'>
+                  <form className='text-center' action='/auth/sign-out' method='post'>
                     <button>Logout</button>
                   </form>
                 </li>
               </ul>
             </div>
-            <LogoutButton />
           </div>
           )
         : (<Link aria-label='Login' href='/login' className='py-2 px-3 bg-purple-700 font-semibold text-white flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover'>Login</Link>

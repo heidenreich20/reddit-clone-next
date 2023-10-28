@@ -296,7 +296,7 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
       <div className='flex xl:hidden col-span-6 flex-col gap-2'>
         {image
           ? (<Image className={`mt-5 ${isExpanded ? 'h-full' : 'max-h-[200px]'} m-auto aspect-video object-cover rounded-lg`} width={500} height={380} src={image || notFound} alt='random image' />)
-          : (<Markdown className={`markdown ${isExpanded ? 'h-full' : 'max-h-[200px]'} overflow-hidden text-sm`} remarkPlugins={[remarkGfm]}>{body}</Markdown>)}
+          : (<Markdown className={`markdown ${isExpanded ? 'h-full' : 'max-h-[200px]'} overflow-hidden text-neutral-100 text-ellipsis text-sm`} remarkPlugins={[remarkGfm]}>{body}</Markdown>)}
         <div className='flex mx-2 items-center text-neutral-400 font-impact font-semibold gap-3 xl:hidden'>
           <div className='flex'>
             <button aria-label='Upvote post' onClick={() => { handleUpvote() }}>
