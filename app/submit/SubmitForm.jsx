@@ -45,7 +45,6 @@ const SubmitForm = ({ profile }) => {
   return (
     <div className='bg-neutral-900 flex flex-col justify-center items-center pt-5'>
       <div className='w-1/3 flex flex-col gap-3'>
-        <p className='text-white'>{newTitle}</p>
         <input aria-label='Comment title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleTitleChange} type='text' placeholder='Title...' />
         <CommentCMS
           newComment={newComment}

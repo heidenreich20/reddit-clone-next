@@ -75,7 +75,9 @@ const CommunityPosts = ({ session }) => {
         ? (
           <>
             <CommunityBanner supabase={supabase} banner={`${communityData?.community_name}/${communityData?.community_banner}`} />
-            <CommunityIcon supabase={supabase} title={communityData?.community_name} subtitle={communityData?.subtitle} url={`${communityData?.community_name}/${communityData?.community_icon}`} />
+            <div className='mx-6'>
+              <CommunityIcon supabase={supabase} title={communityData?.community_name} subtitle={communityData?.subtitle} url={`${communityData?.community_name}/${communityData?.community_icon}`} />
+            </div>
           </>
           )
         : (<div className='w-full h-56 bg-neutral-700 animate-pulse' />)}
