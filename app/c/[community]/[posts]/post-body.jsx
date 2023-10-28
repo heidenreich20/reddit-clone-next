@@ -144,7 +144,7 @@ const PostBody = ({ session }) => {
               {post?.image ? <img className='w-full' src={post?.image} alt='' /> : null}
             </div>
           </div>
-          <div className='flex justify-center p-5'>
+          <div className='flex flex-col justify-center p-5'>
             {session
               ? (
                 <CommentCMS
