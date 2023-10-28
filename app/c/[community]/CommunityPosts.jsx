@@ -102,11 +102,11 @@ const CommunityPosts = ({ session }) => {
                 />
               ))}
             </ul>
-            )
+          )
           : (<div className='flex justify-center items-center w-full text-white bg-neutral-900 rounded-lg border border-neutral-600'>No posts found</div>)}
         <ExtraInfo session={session} params={community} supabase={supabase} />
       </div>
-    </div>
+    </div >
   )
 }
 

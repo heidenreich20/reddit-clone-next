@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import LogoutButton from './LogoutButton'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import NavMenu from '@/components/NavMenu'
 import { useOnClickOutside } from 'usehooks-ts'
