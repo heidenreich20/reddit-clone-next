@@ -12,7 +12,6 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import moment from 'moment'
 import ExtraInfo from '@/components/ExtraInfo'
-require('moment/locale/es')
 
 const PostBody = ({ session }) => {
   const [newComment, setNewComment] = useState('')
@@ -119,7 +118,7 @@ const PostBody = ({ session }) => {
     }
   }
 
-  const timeSince = moment(createdAt, 'YYYYMMDD').fromNow()
+  const timeSince = moment(createdAt, 'YYYYMMDD').locale('en').fromNow()
   return (
     <section className='bg-neutral-800'>
       <ConfirmPrompt
@@ -135,7 +134,7 @@ const PostBody = ({ session }) => {
           <div className='text-white justify-center flex gap-3 bg-neutral-600 rounded-t-lg'>
             <div className='flex w-full flex-col gap-2 p-3 sm:p-5'>
               <div className='flex gap-2'>
-                <p className='sm:text-base text-xs'>Creado por</p>
+                <p className='sm:text-base text-xs'>Posted by</p>
                 <Link className='sm:text-base text-xs font-bold text-white' href={`/users/${post?.author_name}`}>{post?.author_name}</Link>
                 <p className='sm:text-base text-xs'>{`${timeSince}`}</p>
               </div>
