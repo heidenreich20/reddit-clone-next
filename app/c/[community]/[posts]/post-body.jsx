@@ -18,6 +18,7 @@ const PostBody = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
   const [createdAt, setCreatedAt] = useState(null)
+  const [replies, setReplies] = useState(null)
   const supabase = createClientComponentClient()
   const params = useParams()
   const [post, setPost] = useState(null)
@@ -41,11 +42,19 @@ const PostBody = ({ session }) => {
           .from('posts')
           .select()
           .eq('post_id', params.posts)
+          .single()
         if (error) {
           console.error('Error fetching posts:', error)
         } else {
-          setPost(posts[0])
-          setCreatedAt(posts[0].created_at)
+          const { data: replies } = await supabase
+            .from('replies')
+            .select()
+            .eq('post_id', posts?.post_id)
+          if (replies) {
+            setReplies(replies)
+          }
+          setPost(posts)
+          setCreatedAt(posts.created_at)
         }
       } catch (error) {
         console.error('Error fetching posts:', error)
@@ -118,6 +127,23 @@ const PostBody = ({ session }) => {
     }
   }
 
+  // useEffect(() => {
+  //   try {
+  //     const fetchReplies = async () => {
+  //       const { data } = await supabase
+  //         .from('replies')
+  //         .select()
+  //         .eq('post_id', post?.post_id)
+  //       if (data) {
+  //         setReplies(data)
+  //       }
+  //     }
+  //     fetchReplies()
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }, [post])
+
   const timeSince = moment(createdAt, 'YYYYMMDD').locale('en').fromNow()
   return (
     <section className='bg-neutral-800'>
@@ -154,18 +180,24 @@ const PostBody = ({ session }) => {
                 )
               : (<Link href='/login' aria-label='You must be logged in to comment' className='text-white font-semibold outline outline-1 m-auto outline-red-600 p-2 rounded-lg w-fit'>You must be logged in to comment</Link>)}
             <ul className='flex flex-col gap-2'>
-              {postComments?.map((comment) => (
-                <Comment
-                  reqId={user?.id}
-                  authorId={comment.author_id}
-                  deleteComment={() => openConfirmPrompt(comment.id)}
-                  username={comment.comment_owner}
-                  key={comment.id}
-                  postId={comment.post_id}
-                  avatarUrl={comment.avatar_url}
-                  body={comment.body}
-                />
-              ))}
+              {replies
+                ? (
+                    postComments?.map((comment) => (
+                      <Comment
+                        supabase={supabase}
+                        reqId={user?.id}
+                        authorId={comment.author_id}
+                        deleteComment={() => openConfirmPrompt(comment.id)}
+                        username={comment.comment_owner}
+                        key={comment.id}
+                        commentId={comment.id}
+                        avatarUrl={comment.avatar_url}
+                        body={comment.body}
+                        replies={replies?.filter((reply) => reply.reply_to === comment.id)} // Pass replies to the comment
+                      />
+                    ))
+                  )
+                : (null)}
             </ul>
           </div>
         </div>

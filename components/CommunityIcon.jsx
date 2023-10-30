@@ -7,7 +7,7 @@ const CommunityIcon = ({ title, subtitle, url, supabase }) => {
   const [communityIcon, setCommunityIcon] = useState()
 
   useEffect(() => {
-    async function downloadImage(path) {
+    async function downloadImage (path) {
       try {
         const { data, error } = await supabase.storage.from('community_icons').download(path)
         if (error) {
