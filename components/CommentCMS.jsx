@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import rehypeSanitize from 'rehype-sanitize'
 
-const CommentCMS = ({ newComment, onCommentChange, onSubmitComment }) => {
+const CommentCMS = ({ newComment, onCommentChange, onSubmitComment, show }) => {
   const [value, setValue] = useState('')
 
   const bold = {
@@ -71,9 +71,8 @@ const CommentCMS = ({ newComment, onCommentChange, onSubmitComment }) => {
       api.replaceSelection(modifyText)
     }
   }
-
   return (
-    <div data-color-mode='dark' className='flex w-full flex-col gap-2 mb-5'>
+    <div data-color-mode='dark' className={`${show ? 'flex' : 'hidden'} w-full flex-col gap-2 mb-5`}>
       <MDEditor
         visibleDragbar={false}
         value={value}

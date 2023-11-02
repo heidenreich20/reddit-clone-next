@@ -18,7 +18,6 @@ const PostBody = ({ session }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
   const [createdAt, setCreatedAt] = useState(null)
-  const [replies, setReplies] = useState(null)
   const supabase = createClientComponentClient()
   const params = useParams()
   const [post, setPost] = useState(null)
@@ -45,17 +44,8 @@ const PostBody = ({ session }) => {
           .single()
         if (error) {
           console.error('Error fetching posts:', error)
-        } else {
-          const { data: replies } = await supabase
-            .from('replies')
-            .select()
-            .eq('post_id', posts?.post_id)
-          if (replies) {
-            setReplies(replies)
-          }
-          setPost(posts)
-          setCreatedAt(posts.created_at)
         }
+        setPost(posts)
       } catch (error) {
         console.error('Error fetching posts:', error)
       }
@@ -77,6 +67,7 @@ const PostBody = ({ session }) => {
         }
         if (data) {
           setUserData(data)
+          setCreatedAt(data?.created_at)
         }
       } catch (error) {
         // eslint-disable-next-line no-undef
@@ -156,8 +147,8 @@ const PostBody = ({ session }) => {
         message='You will permanently delete this comment'
       />
       <div className='flex m-auto md:w-2/3 p-4 gap-6'>
-        <div className='gap-12 w-full md:w-2/3 flex bg-neutral-700 rounded-lg flex-col'>
-          <div className='text-white justify-center flex gap-3 bg-neutral-600 rounded-t-lg'>
+        <div className='gap-12 w-full md:w-2/3 flex bg-neutral-700/[0.4] rounded-lg flex-col'>
+          <div className='text-white justify-center flex gap-3 bg-neutral-700/[0.6] rounded-t-lg'>
             <div className='flex w-full flex-col gap-2 p-3 sm:p-5'>
               <div className='flex gap-2'>
                 <p className='sm:text-base text-xs'>Posted by</p>
@@ -179,25 +170,22 @@ const PostBody = ({ session }) => {
                 />
                 )
               : (<Link href='/login' aria-label='You must be logged in to comment' className='text-white font-semibold outline outline-1 m-auto outline-red-600 p-2 rounded-lg w-fit'>You must be logged in to comment</Link>)}
-            <ul className='flex flex-col gap-2'>
-              {replies
-                ? (
-                    postComments?.map((comment) => (
-                      <Comment
-                        supabase={supabase}
-                        reqId={user?.id}
-                        authorId={comment.author_id}
-                        deleteComment={() => openConfirmPrompt(comment.id)}
-                        username={comment.comment_owner}
-                        key={comment.id}
-                        commentId={comment.id}
-                        avatarUrl={comment.avatar_url}
-                        body={comment.body}
-                        replies={replies?.filter((reply) => reply.reply_to === comment.id)} // Pass replies to the comment
-                      />
-                    ))
-                  )
-                : (null)}
+            <ul className='flex gap-6 flex-col rounded-lg p-2'>
+              {postComments?.map((comment) => (
+                <Comment
+                  userData={userData}
+                  postId={params?.posts}
+                  supabase={supabase}
+                  reqId={user?.id}
+                  authorId={comment.author_id}
+                  deleteComment={() => openConfirmPrompt(comment.id)}
+                  username={comment.comment_owner}
+                  key={comment.id}
+                  commentId={comment.id}
+                  avatarUrl={comment.avatar_url}
+                  body={comment.body}
+                />
+              ))}
             </ul>
           </div>
         </div>
