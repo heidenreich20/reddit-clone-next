@@ -63,15 +63,19 @@ const PostCard = ({ title, image, authorId, session, body, voteData, version, up
   useEffect(() => {
     const fetchComments = async (postId) => {
       try {
-        const { data, error } = await supabase
+        const { count: comments, error: commentError } = await supabase
           .from('comments')
-          .select()
+          .select('id', { count: 'exact' })
           .eq('post_id', postId)
-        if (error) {
-          console.log(error)
-        } else {
-          setCommentCount(data.length)
+        const { count: replies, error: replyError } = await supabase
+          .from('replies')
+          .select('id', { count: 'exact' })
+          .eq('post_id', postId)
+        if (replyError || commentError) {
+          console.log(replyError || commentError)
         }
+        const totalCommentCount = comments + replies
+        setCommentCount(totalCommentCount)
       } catch (error) {
         console.log(error)
       }
