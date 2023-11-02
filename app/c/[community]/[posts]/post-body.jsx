@@ -147,7 +147,7 @@ const PostBody = ({ session }) => {
         message='You will permanently delete this comment'
       />
       <div className='flex m-auto md:w-2/3 p-4 gap-6'>
-        <div className='gap-12 w-full md:w-2/3 flex bg-neutral-700/[0.4] rounded-lg flex-col'>
+        <div className='w-full md:w-2/3 flex bg-neutral-700/[0.4] rounded-lg flex-col'>
           <div className='text-white justify-center flex gap-3 bg-neutral-700/[0.6] rounded-t-lg'>
             <div className='flex w-full flex-col gap-2 p-3 sm:p-5'>
               <div className='flex gap-2'>
