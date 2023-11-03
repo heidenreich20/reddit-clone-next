@@ -118,23 +118,6 @@ const PostBody = ({ session }) => {
     }
   }
 
-  // useEffect(() => {
-  //   try {
-  //     const fetchReplies = async () => {
-  //       const { data } = await supabase
-  //         .from('replies')
-  //         .select()
-  //         .eq('post_id', post?.post_id)
-  //       if (data) {
-  //         setReplies(data)
-  //       }
-  //     }
-  //     fetchReplies()
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }, [post])
-
   const timeSince = moment(createdAt, 'YYYYMMDD').locale('en').fromNow()
   return (
     <section className='bg-neutral-800'>
@@ -160,7 +143,7 @@ const PostBody = ({ session }) => {
               {post?.image ? <img className='w-full' src={post?.image} alt='' /> : null}
             </div>
           </div>
-          <div className='flex flex-col justify-center p-5'>
+          <div className='flex flex-col justify-center md:p-5'>
             {session
               ? (
                 <CommentCMS
@@ -184,6 +167,7 @@ const PostBody = ({ session }) => {
                   commentId={comment.id}
                   avatarUrl={comment.avatar_url}
                   body={comment.body}
+                  createdAt={comment.created_at}
                 />
               ))}
             </ul>
