@@ -4,6 +4,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 
 export const metadata = {
+  metadataBase: new URL('https://reddit-next.vercel.app/'),
   title: 'Reddit Clone Project',
   description: 'A Reddit clone made for educational purposes only',
   openGraph: {
@@ -16,6 +17,14 @@ export const metadata = {
         height: 600
       }
     ]
+  },
+  twitter: {
+    title: 'Reddit Clone Project',
+    description: 'A Reddit clone made for educational purposes only',
+    images: {
+      url: '/og-image.PNG',
+      alt: 'Website image'
+    }
   }
 }
 
@@ -30,7 +39,6 @@ export default async function RootLayout ({ children }) {
   return (
     <html lang='en'>
       <head>
-        <meta property='og:image' content='/og-image.PNG' />
         <link rel='shortcut icon' href='favicon.ico' />
       </head>
       <body>
