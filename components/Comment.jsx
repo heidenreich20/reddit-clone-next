@@ -102,7 +102,7 @@ const Comment = ({ userData, avatarUrl, username, commentId, body, supabase, pos
             })}
           </div>
 
-        )
+          )
         : (
           <div className='flex items-center gap-2 text-white font-semibold p-2 text-sm'>
             <button aria-label='Expand post' className='text-white' onClick={() => setIsCommentExpanded(!isCommentExpanded)}>
@@ -112,7 +112,7 @@ const Comment = ({ userData, avatarUrl, username, commentId, body, supabase, pos
             <p>{username}</p>
             <p>{timeSince}</p>
           </div>
-        )}
+          )}
     </div>
   )
 }
