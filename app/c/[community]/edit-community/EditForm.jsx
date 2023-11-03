@@ -1,12 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import CommunityIcon from '@/components/CommunityIcon'
 
 const EditForm = () => {
-  const pathname = usePathname()
-  const { push } = useRouter()
   const { community } = useParams()
   const supabase = createClientComponentClient()
   const [communityData, setCommunityData] = useState()
@@ -161,10 +159,10 @@ const EditForm = () => {
     }
   }
 
-  const handleTest = async (e) => {
-    e.preventDefault()
-    console.log('testin testing')
-  }
+  // const handleTest = async (e) => {
+  //   e.preventDefault()
+  //   console.log('testin testing')
+  // }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -192,7 +190,7 @@ const EditForm = () => {
   }
 
   useEffect(() => {
-    async function downloadImage(path) {
+    async function downloadImage (path) {
       try {
         const { data, error } = await supabase.storage.from(`community_icons/${community}`).download(path)
         if (error) {
