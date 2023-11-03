@@ -31,6 +31,7 @@ export default async function RootLayout ({ children }) {
   return (
     <html lang='en'>
       <head>
+        <link rel='canonical' href='https://reddit-next.vercel.app' />
         <link rel='shortcut icon' href='favicon.ico' />
       </head>
       <body>
