@@ -1,11 +1,23 @@
 import './globals.css'
+import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Reddit Clone Project',
-  description: 'A Reddit clone made for educational purposes only'
+  description: 'A Reddit clone made for educational purposes only',
+  openGraph: {
+    title: 'Reddit Clone Project',
+    description: 'A Reddit clone made for educational purposes only',
+    images: [
+      {
+        url: '/og-image.PNG',
+        width: 800,
+        height: 600,
+      },
+    ]
+  },
 }
 
 export default async function RootLayout ({ children }) {
