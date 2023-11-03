@@ -37,8 +37,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "./node_modules/standard/eslintrc.json",
-      "plugin:@typescript-eslint/recommended"
+      "./node_modules/standard/eslintrc.json"
     ]
   }
 }
