@@ -1,7 +1,7 @@
-'use client'
 import './globals.css'
 import Navbar from '@/components/Navbar'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 
 export const metadata = {
   metadataBase: new URL('https://reddit-next.vercel.app/'),
@@ -17,19 +17,12 @@ export const metadata = {
         height: 600
       }
     ]
-  },
-  twitter: {
-    title: 'Reddit Clone Project',
-    description: 'A Reddit clone made for educational purposes only',
-    images: {
-      url: '/og-image.PNG',
-      alt: 'Website image'
-    }
   }
 }
 
 export default async function RootLayout ({ children }) {
-  const supabase = createClientComponentClient()
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
   const {
     data: { session }
