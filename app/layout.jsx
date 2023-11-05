@@ -2,6 +2,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
+import { karla } from './fonts'
 
 export const metadata = {
   metadataBase: new URL('https://reddit-next.vercel.app/'),
@@ -34,7 +35,7 @@ export default async function RootLayout ({ children }) {
         <link rel='canonical' href='https://reddit-next.vercel.app/' />
         <link rel='shortcut icon' href='favicon.ico' />
       </head>
-      <body>
+      <body className={`${karla.className}`}>
         <Navbar session={session} />
         {children}
       </body>

@@ -29,7 +29,7 @@ const Feed = () => {
   }, [])
 
   return (
-    <div className='lg:flex border border-neutral-600 p-3 rounded-lg bg-neutral-900 hidden flex-col gap-3 w-1/3'>
+    <div className='lg:flex border border-neutral-600 p-3 rounded-lg bg-neutral-900 hidden h-fit flex-col gap-3 w-1/3'>
       {feedData?.map((feed) => {
         const timeSince = moment(feed.created_at, 'YYYYMMDD').locale('en').fromNow()
         return (
