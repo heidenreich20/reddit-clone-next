@@ -33,5 +33,11 @@
     "eslint-plugin-react": "^7.33.2",
     "standard": "^17.1.0",
     "typescript": "^5.2.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "./node_modules/standard/eslintrc.json"
+  ]
   }
 }
