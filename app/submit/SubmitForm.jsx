@@ -41,12 +41,13 @@ const SubmitForm = ({ profile }) => {
     }
     push('/')
   }
-
+  console.log(newTitle)
   return (
-    <div className='bg-neutral-900 flex flex-col justify-center items-center pt-5'>
+    <div className='bg-neutral-800 flex flex-col justify-center items-center pt-5'>
       <div className='w-1/3 flex flex-col gap-3'>
         <input aria-label='Comment title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleTitleChange} type='text' placeholder='Title...' />
         <CommentCMS
+          show
           newComment={newComment}
           onCommentChange={(e) => setNewComment(e.target.value)}
           onSubmitComment={createPost}
