@@ -6,17 +6,19 @@ import React, { useState } from 'react'
 const SubmitForm = ({ profile }) => {
   const { push } = useRouter()
   const supabase = createClientComponentClient()
-  const [communityTitle, setCommunityTitle] = useState(null)
-  const [subTitle, setSubTitle] = useState(null)
   const [newFile, setNewFile] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [newCommunity, setNewCommunity] = useState({
+    community_name: '',
+    sub_title: '',
+    title: ''
+  })
 
-  const handleTitleChange = (e) => {
-    setCommunityTitle(e.target.value)
-  }
-
-  const handleSubTitleChange = (e) => {
-    setSubTitle(e.target.value)
+  const handleChange = (e) => {
+    setNewCommunity({
+      ...newCommunity,
+      [e.target.name]: e.target.value
+    })
   }
 
   const createCommunity = async (url) => {
@@ -29,9 +31,12 @@ const SubmitForm = ({ profile }) => {
         .from('communities')
         .upsert([
           {
-            community_name: communityTitle,
+            community_name: newCommunity.community_name,
             community_banner: url,
-            sub_title: subTitle
+            community_icon: url,
+            sub_title: newCommunity.sub_title,
+            subtitle: newCommunity.title,
+            owner: profile.id
           }
         ])
       if (error) {
@@ -40,7 +45,7 @@ const SubmitForm = ({ profile }) => {
     } catch (error) {
       console.error('Error creating comment:', error)
     }
-    push(`/${communityTitle}`)
+    push(`/c/${newCommunity.community_name}`)
   }
   const uploadCommunityIcon = async () => {
     try {
@@ -51,7 +56,7 @@ const SubmitForm = ({ profile }) => {
       const { error } = await supabase
         .storage
         .from('community_icons')
-        .upload(`${communityTitle}/${filePath}`, newFile, {
+        .upload(`${newCommunity.community_name}/${filePath}`, newFile, {
           cacheControl: '3600',
           upsert: false
         })
@@ -68,7 +73,7 @@ const SubmitForm = ({ profile }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    uploadCommunityIcon(communityTitle)
+    uploadCommunityIcon(newCommunity.community_name)
   }
 
   const handleDragOver = (event) => {
@@ -86,10 +91,9 @@ const SubmitForm = ({ profile }) => {
   return (
     <div className='bg-neutral-900 flex flex-col justify-center items-center pt-5'>
       <form onSubmit={handleSubmit} className='w-1/3 flex flex-col gap-3'>
-        <p className='text-white'>{communityTitle}</p>
-        <input required className='bg-neutral-800 p-2 rounded text-white' onChange={handleTitleChange} type='text' placeholder='Title...' />
-        <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleSubTitleChange} type='text' placeholder='Members title...' />
-        <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleSubTitleChange} type='text' placeholder='Members title...' />
+        <input aria-label='Title' name='community_name' required className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Title...' />
+        <input name='sub_title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Members title...' />
+        <input name='Community Title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Community subtitle..' />
         <div
           className='h-56 rounded bg-neutral-800 imageView ext-white'
           onDragOver={handleDragOver}
@@ -97,7 +101,7 @@ const SubmitForm = ({ profile }) => {
         >
           <h1 className='text-white font-bold'>Drag and Drop Files to Upload</h1>
         </div>
-        <button aria-label='Submit community' disabled={uploading} type='submit'>Submit</button>
+        <button className='bg-purple-800 rounded-lg w-fit m-auto p-2 text-white font-semibold' aria-label='Submit community' disabled={uploading} type='submit'>Submit</button>
       </form>
     </div>
   )

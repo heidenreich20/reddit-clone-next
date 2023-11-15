@@ -1,7 +1,6 @@
 'use client'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState, useEffect, useCallback } from 'react'
-import { useParams } from 'next/navigation'
 import Comment from '@/components/Comment'
 import CommentCMS from '@/components/CommentCMS'
 import Link from 'next/link'
@@ -13,13 +12,13 @@ import remarkGfm from 'remark-gfm'
 import moment from 'moment'
 import ExtraInfo from '@/components/ExtraInfo'
 
-const PostBody = ({ session }) => {
+const PostBody = ({ session, params }) => {
   const [newComment, setNewComment] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [createdAt, setCreatedAt] = useState(null)
   const supabase = createClientComponentClient()
-  const params = useParams()
   const [post, setPost] = useState(null)
   const [userData, setUserData] = useState(null)
   const { postComments, fetchComments } = useFetchComments(supabase, params)
@@ -36,6 +35,7 @@ const PostBody = ({ session }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true)
       try {
         const { data: posts, error } = await supabase
           .from('posts')
@@ -48,6 +48,8 @@ const PostBody = ({ session }) => {
         setPost(posts)
       } catch (error) {
         console.error('Error fetching posts:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -131,22 +133,30 @@ const PostBody = ({ session }) => {
       />
       <div className='flex m-auto md:w-2/3 p-4 gap-6'>
         <div className='w-full md:w-2/3 flex bg-neutral-700/[0.4] rounded-lg flex-col'>
-          <div className='text-white justify-center flex gap-3 bg-neutral-700/[0.6] rounded-t-lg'>
-            <div className='flex w-full flex-col gap-2 p-3 sm:p-5'>
-              <div className='flex gap-2'>
-                <p className='sm:text-base text-xs'>Posted by</p>
-                <Link className='sm:text-base text-xs font-bold text-white' href={`/users/${post?.author_name}`}>{post?.author_name}</Link>
-                <p className='sm:text-base text-xs'>{`${timeSince}`}</p>
+          {!isLoading
+            ? (
+              <div className='text-white justify-center flex gap-3 bg-neutral-700/[0.6] rounded-t-lg'>
+                <div className='flex w-full flex-col gap-2 p-3 sm:p-5'>
+                  <div className='flex gap-2'>
+                    <p className='sm:text-base text-xs'>Posted by</p>
+                    <Link className='sm:text-base text-xs font-bold text-white' href={`/users/${post?.author_name}`}>{post?.author_name}</Link>
+                    <p className='sm:text-base text-xs'>{`${timeSince}`}</p>
+                  </div>
+                  <h2 className='font-bold text-lg sm:text-xl'>{post?.title}</h2>
+                  <Markdown className='markdown post-image text-sm w-full overflow-hidden' remarkPlugins={[remarkGfm]}>{post?.body}</Markdown>
+                  {post?.image ? <img className='w-full' src={post?.image} alt='' /> : null}
+                </div>
               </div>
-              <h2 className='font-bold text-lg sm:text-xl'>{post?.title}</h2>
-              <Markdown className='markdown post-image text-sm w-full overflow-hidden' remarkPlugins={[remarkGfm]}>{post?.body}</Markdown>
-              {post?.image ? <img className='w-full' src={post?.image} alt='' /> : null}
-            </div>
-          </div>
+
+              )
+            : (
+              <div className='h-56 bg-neutral-700/[0.4] animate-pulse p-2 rounded-t-lg' />
+              )}
           <div className='flex flex-col justify-center md:p-5'>
             {session
               ? (
                 <CommentCMS
+                  show={session}
                   newComment={newComment}
                   onCommentChange={(e) => setNewComment(e.target.value)}
                   onSubmitComment={createComment}

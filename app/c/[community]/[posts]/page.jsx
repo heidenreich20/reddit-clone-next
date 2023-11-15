@@ -2,7 +2,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import PostBody from './post-body'
 
-export default async function profile () {
+export default async function profile ({ params }) {
   const cookieStore = cookies()
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
@@ -10,5 +10,5 @@ export default async function profile () {
     data: { session }
   } = await supabase.auth.getSession()
 
-  return <PostBody session={session} />
+  return <PostBody params={params} session={session} />
 }
