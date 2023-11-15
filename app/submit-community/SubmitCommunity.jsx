@@ -91,9 +91,9 @@ const SubmitForm = ({ profile }) => {
   return (
     <div className='bg-neutral-900 flex flex-col justify-center items-center pt-5'>
       <form onSubmit={handleSubmit} className='w-1/3 flex flex-col gap-3'>
-        <input name='community_name' required className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Title...' />
+        <input aria-label='Title' name='community_name' required className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Title...' />
         <input name='sub_title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Members title...' />
-        <input name='title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Community subtitle..' />
+        <input name='Community Title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Community subtitle..' />
         <div
           className='h-56 rounded bg-neutral-800 imageView ext-white'
           onDragOver={handleDragOver}

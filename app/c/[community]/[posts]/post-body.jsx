@@ -1,7 +1,6 @@
 'use client'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useState, useEffect, useCallback } from 'react'
-import { useParams } from 'next/navigation'
 import Comment from '@/components/Comment'
 import CommentCMS from '@/components/CommentCMS'
 import Link from 'next/link'
@@ -13,14 +12,13 @@ import remarkGfm from 'remark-gfm'
 import moment from 'moment'
 import ExtraInfo from '@/components/ExtraInfo'
 
-const PostBody = ({ session }) => {
+const PostBody = ({ session, params }) => {
   const [newComment, setNewComment] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [createdAt, setCreatedAt] = useState(null)
   const supabase = createClientComponentClient()
-  const params = useParams()
   const [post, setPost] = useState(null)
   const [userData, setUserData] = useState(null)
   const { postComments, fetchComments } = useFetchComments(supabase, params)

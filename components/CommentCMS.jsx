@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import MDEditor from '@uiw/react-md-editor'
 import rehypeSanitize from 'rehype-sanitize'
 
-const CommentCMS = ({ newComment, onCommentChange, onSubmitComment, show }) => {
+const CommentCMS = ({ onSubmitComment, show }) => {
   const [value, setValue] = useState('')
 
   const bold = {
@@ -71,6 +71,7 @@ const CommentCMS = ({ newComment, onCommentChange, onSubmitComment, show }) => {
       api.replaceSelection(modifyText)
     }
   }
+
   return (
     <div data-color-mode='dark' className={`${show ? 'flex' : 'hidden'} w-full flex-col gap-2 mb-5`}>
       <MDEditor
@@ -108,19 +109,6 @@ const CommentCMS = ({ newComment, onCommentChange, onSubmitComment, show }) => {
       </button>
     </div>
   )
-  // return (
-  //   <div className='comment-cms flex mb-2 gap-2 flex-col'>
-  //     <textarea
-  //       className='w-full h-24 resize-none rounded-lg p-1'
-  //       placeholder='Write a comment...'
-  //       value={newComment}
-  //       onChange={onCommentChange}
-  //     />
-  //     <button className='p-1 w-fit font-semibold text-sm rounded-full bg-neutral-300' onClick={onSubmitComment}>
-  //       Comment
-  //     </button>
-  //   </div>
-  // )
 }
 
 export default CommentCMS

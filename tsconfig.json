@@ -23,6 +23,6 @@
       "@/*": ["./*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/NavbarAvatar.jsx", "app/login/page.jsx", "app/layout.tsx", "hooks/useFetchComments.jsx", "app/api/route.js", "app/auth/sign-up/route.js", "app/auth/sign-out/route.js", "app/auth/sign-in/route.js", "utils/supabase.js", "app/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/NavbarAvatar.jsx", "app/login/page.jsx", "app/layout.tsx", "hooks/useFetchComments.jsx", "app/api/route.js", "app/auth/sign-up/route.js", "app/auth/sign-out/route.js", "app/auth/sign-in/route.js", "utils/supabase.js", "app/page.jsx", "vitest.config.js", "tests/submit.test.jsx", "app/submit-community/page.test.jsx", "app/submit-community/SubmitCommunity.jsx", "components/app.test.jsx"],
   "exclude": ["node_modules"]
 }
