@@ -160,11 +160,6 @@ const EditForm = () => {
     }
   }
 
-  // const handleTest = async (e) => {
-  //   e.preventDefault()
-  //   console.log('testin testing')
-  // }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setUploading(true)

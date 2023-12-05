@@ -3,22 +3,26 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
-const SubmitForm = ({ profile }) => {
+const SubmitForm = ({ session }) => {
   const { push } = useRouter()
   const supabase = createClientComponentClient()
+  const [communityTitle, setCommunityTitle] = useState(null)
+  const [membersTitle, setMembersTitle] = useState(null)
+  const [subTitle, setSubTitle] = useState(null)
   const [newFile, setNewFile] = useState('')
   const [uploading, setUploading] = useState(false)
-  const [newCommunity, setNewCommunity] = useState({
-    community_name: '',
-    sub_title: '',
-    title: ''
-  })
+  const user = session?.user
 
-  const handleChange = (e) => {
-    setNewCommunity({
-      ...newCommunity,
-      [e.target.name]: e.target.value
-    })
+  const handleTitleChange = (e) => {
+    setCommunityTitle(e.target.value)
+  }
+
+  const handleMembersChange = (e) => {
+    setMembersTitle(e.target.value)
+  }
+
+  const handleSubTitleChange = (e) => {
+    setSubTitle(e.target.value)
   }
 
   const createCommunity = async (url) => {
@@ -31,12 +35,11 @@ const SubmitForm = ({ profile }) => {
         .from('communities')
         .upsert([
           {
-            community_name: newCommunity.community_name,
+            community_name: communityTitle,
             community_banner: url,
-            community_icon: url,
-            sub_title: newCommunity.sub_title,
-            subtitle: newCommunity.title,
-            owner: profile.id
+            sub_title: membersTitle,
+            subtitle: subTitle,
+            owner: user.id
           }
         ])
       if (error) {
@@ -45,7 +48,7 @@ const SubmitForm = ({ profile }) => {
     } catch (error) {
       console.error('Error creating comment:', error)
     }
-    push(`/c/${newCommunity.community_name}`)
+    push(`/c/${communityTitle}`)
   }
   const uploadCommunityIcon = async () => {
     try {
@@ -56,7 +59,7 @@ const SubmitForm = ({ profile }) => {
       const { error } = await supabase
         .storage
         .from('community_icons')
-        .upload(`${newCommunity.community_name}/${filePath}`, newFile, {
+        .upload(`${communityTitle}/${filePath}`, newFile, {
           cacheControl: '3600',
           upsert: false
         })
@@ -73,7 +76,7 @@ const SubmitForm = ({ profile }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    uploadCommunityIcon(newCommunity.community_name)
+    uploadCommunityIcon(communityTitle)
   }
 
   const handleDragOver = (event) => {
@@ -91,9 +94,10 @@ const SubmitForm = ({ profile }) => {
   return (
     <div className='bg-neutral-900 flex flex-col justify-center items-center pt-5'>
       <form onSubmit={handleSubmit} className='w-1/3 flex flex-col gap-3'>
-        <input aria-label='Title' name='community_name' required className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Title...' />
-        <input name='sub_title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Members title...' />
-        <input name='Community Title' className='bg-neutral-800 p-2 rounded text-white' onChange={handleChange} type='text' placeholder='Community subtitle..' />
+        <p className='text-white'>{communityTitle}</p>
+        <input required className='bg-neutral-800 p-2 rounded text-white' onChange={handleTitleChange} type='text' placeholder='Title...' />
+        <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleSubTitleChange} type='text' placeholder='Subtitle...' />
+        <input className='bg-neutral-800 p-2 rounded text-white' onChange={handleMembersChange} type='text' placeholder='Members title...' />
         <div
           className='h-56 rounded bg-neutral-800 imageView ext-white'
           onDragOver={handleDragOver}
@@ -101,7 +105,7 @@ const SubmitForm = ({ profile }) => {
         >
           <h1 className='text-white font-bold'>Drag and Drop Files to Upload</h1>
         </div>
-        <button className='bg-purple-800 rounded-lg w-fit m-auto p-2 text-white font-semibold' aria-label='Submit community' disabled={uploading} type='submit'>Submit</button>
+        <button className='p-3 bg-purple-800 text-white rounded-lg w-fit m-auto' aria-label='Submit community' disabled={uploading} type='submit'>Submit</button>
       </form>
     </div>
   )
