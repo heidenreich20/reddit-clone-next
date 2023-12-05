@@ -214,6 +214,3 @@ const PostBody = ({ session }) => {
 }
 
 export default PostBody
-}
-
-export default PostBody
