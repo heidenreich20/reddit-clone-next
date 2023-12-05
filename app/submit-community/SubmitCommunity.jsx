@@ -35,7 +35,7 @@ const SubmitForm = ({ session }) => {
         .from('communities')
         .upsert([
           {
-            community_name: newCommunity.community_name,
+            community_name: communityTitle,
             community_banner: url,
             sub_title: membersTitle,
             subtitle: subTitle,
@@ -50,7 +50,6 @@ const SubmitForm = ({ session }) => {
     }
     push(`/c/${communityTitle}`)
   }
-  
   const uploadCommunityIcon = async () => {
     try {
       setUploading(true)
@@ -60,7 +59,7 @@ const SubmitForm = ({ session }) => {
       const { error } = await supabase
         .storage
         .from('community_icons')
-        .upload(`${newCommunity.community_name}/${filePath}`, newFile, {
+        .upload(`${communityTitle}/${filePath}`, newFile, {
           cacheControl: '3600',
           upsert: false
         })
@@ -77,7 +76,7 @@ const SubmitForm = ({ session }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    uploadCommunityIcon(newCommunity.community_name)
+    uploadCommunityIcon(communityTitle)
   }
 
   const handleDragOver = (event) => {
