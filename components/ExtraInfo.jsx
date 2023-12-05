@@ -97,7 +97,7 @@ const ExtraInfo = ({ supabase, session, params }) => {
   }
 
   return (
-    <div className='bg-neutral-900 hidden lg:flex flex-col gap-3 text-white w-1/3 p-5 rounded-lg border border-neutral-600 h-full'>
+    <div className='bg-neutral-900 sticky top-16 hidden lg:flex flex-col gap-3 text-white w-1/3 p-5 rounded-lg border border-neutral-600 h-full'>
       <strong className='text-xs text-neutral-500'>About this community</strong>
       {
         community

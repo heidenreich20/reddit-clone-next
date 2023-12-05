@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import PostBody from './post-body'
 
 export default async function () {
+
   const cookieStore = cookies()
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
 
@@ -13,4 +14,4 @@ export default async function () {
   return (
     <PostBody session={session} />
   )
-}
+
