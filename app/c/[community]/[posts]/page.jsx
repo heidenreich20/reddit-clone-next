@@ -12,4 +12,3 @@ export default async function profile () {
 
   return <PostBody session={session} />
 }
-
