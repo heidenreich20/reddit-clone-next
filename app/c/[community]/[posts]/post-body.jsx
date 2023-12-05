@@ -12,9 +12,13 @@ import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import moment from 'moment'
 import ExtraInfo from '@/components/ExtraInfo'
+import CommunityIcon from '@/components/CommunityIcon'
+import CommunityBanner from '@/components/CommunityBanner'
 
 const PostBody = ({ session }) => {
   const [newComment, setNewComment] = useState('')
+  const { community } = useParams()
+  const [communityData, setCommunityData] = useState()
   const [isOpen, setIsOpen] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState(null)
   const [createdAt, setCreatedAt] = useState(null)
@@ -33,6 +37,26 @@ const PostBody = ({ session }) => {
   const closeConfirmPrompt = () => {
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    const fetchCommunity = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('communities')
+          .select()
+          .eq('community_name', community)
+          .single()
+        if (error) {
+          console.error('Error fetching posts:', error)
+        } else {
+          setCommunityData(data)
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error)
+      }
+    }
+    fetchCommunity()
+  }, [community])
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -121,6 +145,16 @@ const PostBody = ({ session }) => {
   const timeSince = moment(createdAt, 'YYYYMMDD').locale('en').fromNow()
   return (
     <section className='bg-neutral-800'>
+      {communityData
+        ? (
+          <>
+            <CommunityBanner supabase={supabase} banner={`${communityData?.community_name}/${communityData?.community_banner}`} />
+            <div className='mx-6'>
+              <CommunityIcon supabase={supabase} title={communityData?.community_name} subtitle={communityData?.subtitle} url={`${communityData?.community_name}/${communityData?.community_icon}`} />
+            </div>
+          </>
+          )
+        : (<div className='w-full h-56 bg-neutral-700 animate-pulse' />)}
       <ConfirmPrompt
         isOpen={isOpen}
         action='Delete'

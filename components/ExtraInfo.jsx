@@ -99,14 +99,22 @@ const ExtraInfo = ({ supabase, session, params }) => {
   return (
     <div className='bg-neutral-900 hidden lg:flex flex-col gap-3 text-white w-1/3 p-5 rounded-lg border border-neutral-600 h-full'>
       <strong className='text-xs text-neutral-500'>About this community</strong>
-      <div className='flex xl:flex-row flex-col justify-between'>
-        <h2>{community?.community_name}</h2>
-        <p>{`We are ${subCount} ${community.sub_title}`}</p>
-      </div>
+      {
+        community
+          ? (
+            <div className='flex xl:flex-row flex-col justify-between'>
+              <h2>{community?.community_name}</h2>
+              <p>{`We are ${subCount} ${community.sub_title}`}</p>
+            </div>
+            )
+          : (
+            <p className='bg-neutral-800 animate-pulse rounded-full p-1 text-transparent'>loading</p>
+            )
+      }
       {isSubbed
         ? (<button onClick={unsubCommunity} className='bg-neutral-300 p-2 rounded-full font-bold text-xs text-black'>Leave community</button>)
         : (<button onClick={subCommunity} className='bg-neutral-300 p-2 rounded-full font-bold text-xs text-black'>Join community</button>)}
-      {community.owner === user?.id ? (<Link href={`${pathname}/edit-community`} className='bg-purple-700 p-2 rounded-full font-bold text-xs text-white text-center'>Edit community</Link>) : null}
+      {community.owner !== undefined && community.owner === user?.id ? (<Link href={`${pathname}/edit-community`} className='bg-purple-700 p-2 rounded-full font-bold text-xs text-white text-center'>Edit community</Link>) : null}
     </div>
   )
 }
