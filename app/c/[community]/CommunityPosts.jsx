@@ -53,28 +53,12 @@ const CommunityPosts = ({ session }) => {
     fetchCommunity()
   }, [community])
 
-  // useEffect(() => {
-  //   async function downloadImage (path) {
-  //     try {
-  //       const { data, error } = await supabase.storage.from('community_icons').download(path)
-  //       if (error) {
-  //         throw error
-  //       }
-  //       const url = URL.createObjectURL(data)
-  //       setCommunityBanner(url)
-  //     } catch (error) {
-  //       console.log('Error downloading image: ', error)
-  //     }
-  //   }
-  //   if (communityBannerUrl) downloadImage(communityBannerUrl)
-  // }, [communityBannerUrl, supabase])
-
   return (
     <div className='flex flex-col gap-2 pb-5'>
       {communityData
         ? (
           <>
-            <CommunityBanner supabase={supabase} banner={`${communityData?.community_name}/${communityData?.community_banner}`} />
+            <CommunityBanner supabase={supabase} title={communityData?.community_name} banner={`${communityData?.community_name}/${communityData?.community_banner}`} />
             <div className='mx-6'>
               <CommunityIcon supabase={supabase} title={communityData?.community_name} subtitle={communityData?.subtitle} url={`${communityData?.community_name}/${communityData?.community_icon}`} />
             </div>

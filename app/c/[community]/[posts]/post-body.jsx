@@ -148,7 +148,7 @@ const PostBody = ({ session }) => {
       {communityData
         ? (
           <>
-            <CommunityBanner supabase={supabase} banner={`${communityData?.community_name}/${communityData?.community_banner}`} />
+            <CommunityBanner supabase={supabase} title={communityData?.community_name} banner={`${communityData?.community_name}/${communityData?.community_banner}`} />
             <div className='mx-6'>
               <CommunityIcon supabase={supabase} title={communityData?.community_name} subtitle={communityData?.subtitle} url={`${communityData?.community_name}/${communityData?.community_icon}`} />
             </div>

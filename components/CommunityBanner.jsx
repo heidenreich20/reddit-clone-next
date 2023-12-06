@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
-const CommunityBanner = ({ banner, supabase }) => {
+const CommunityBanner = ({ banner, supabase, title }) => {
   const [communityBanner, setCommunityBanner] = useState()
   useEffect(() => {
     async function downloadImage (path) {
@@ -22,9 +22,11 @@ const CommunityBanner = ({ banner, supabase }) => {
 
   return (
     <div className='relative w-full h-64'>
-      {communityBanner
-        ? (<Image className='w-full absolute object-cover aspect-video' alt='community banner' fill src={communityBanner} />)
-        : null}
+      <a href={`/c/${title}`} aria-label='community main page'>
+        {communityBanner
+          ? (<Image className='w-full absolute object-cover aspect-video' alt='community banner' fill src={communityBanner} />)
+          : null}
+      </a>
     </div>
   )
 }
